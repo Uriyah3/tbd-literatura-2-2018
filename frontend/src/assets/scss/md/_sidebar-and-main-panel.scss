@@ -178,16 +178,6 @@
         padding: $padding-base 0;
         z-index: 4;
 
-        &:after{
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 15px;
-            height: 1px;
-            width: calc(100% - 30px);
-            background-color: rgba(180,180,180, .3);
-
-        }
 
         p{
             float: left;
@@ -224,17 +214,15 @@
             }
 
             .logo-img{
-              width: 40px;
+              width: 220px;
               display: inline-block;
-              height: 40px;
-              background: $white-color;
-              border-radius: 50%;
+              height: 90px;
               text-align: center;
               overflow: hidden;
               @include shadow-big();
 
                 img{
-                  width: 55%;
+                  width: 100%;
                   vertical-align: -webkit-baseline-middle;
                 }
             }
@@ -273,7 +261,7 @@
         @include set-background-color-button($brand-info);
     }
     &[data-color="green"]{
-        @include set-background-color-button($brand-success);
+        @include set-background-color-button(rgba(31, 58, 147, 1));
     }
     &[data-color="orange"]{
         @include set-background-color-button($brand-warning);
