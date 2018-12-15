@@ -23,8 +23,10 @@ public class TweetService {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public Optional<Tweet> getTweetsById(@PathVariable("id") Long id){
 	
-		return repository.findById(id);		
+		return repository.findById(id);
 	}
 	
-	
+	public List<Tweet> getTweetsElastic(){
+		return repository.findAll();
+	}
 }

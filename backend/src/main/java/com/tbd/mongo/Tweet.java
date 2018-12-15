@@ -2,8 +2,8 @@ package com.tbd.mongo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.tbd.mongo.entities.User;
- 
+import com.tbd.entities.User;
+
 //1065786331274649602
 @Document(collection="statusJSONImpl")
 public class Tweet {
