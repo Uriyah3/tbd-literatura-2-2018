@@ -28,7 +28,7 @@ export default {
           position: "bottom",
           text: "Libros"
         }
-      },
+      }
     };
   }
 };

@@ -1,16 +1,16 @@
 <template>
   <div class="content">
     <div class="md-layout">
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-49">
         <chartjs-line/>
       </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-49">
         <chart-doughnut/>
       </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-49">
         <chart-bar/>
       </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-49">
         <chart-line/>
       </div>
     </div>
