@@ -17,6 +17,9 @@ import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
 
+import "chart.js";
+import "hchs-vue-charts";
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
@@ -28,6 +31,7 @@ Vue.use(MaterialDashboard);
 Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(Notifications);
+Vue.use(window.VueCharts);
 
 Vue.prototype.$Chartist = Chartist;
 

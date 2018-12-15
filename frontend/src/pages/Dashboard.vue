@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <div class="md-layout">
+    <chartjs-doughnut v-bind:labels="labels" v-bind:datasets="datasets" v-bind:option="option" :width="300" :height="500"></chartjs-doughnut>
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-33">
         <chart-card
           :chart-data="dailySalesChart.data"
@@ -198,6 +199,21 @@ export default {
   },
   data() {
     return {
+      labels: ["Gabriel García", "Pablo Coelho", "Pablo Neruda"],
+      datasets: 
+      [
+        {
+          data: [100, 20, 500],
+          backgroundColor: ["Blue", "Orange", "Green"]
+        }
+      ],
+      option: {
+        title: {
+          display: true,
+          position: "bottom",
+          text: "Libros"
+        }
+      },
       dailySalesChart: {
         data: {
           labels: ["M", "T", "W", "T", "F", "S", "S"],
