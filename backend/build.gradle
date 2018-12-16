@@ -26,9 +26,9 @@ repositories {
 
 dependencies {
 	compile ('mysql:mysql-connector-java')
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-data-jpa")
-    compile("com.h2database:h2")
+	compile("org.springframework.boot:spring-boot-starter-data-rest")
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+	compile("com.h2database:h2")
 	compile 'org.elasticsearch.client:elasticsearch-rest-client-sniffer:6.5.3'
 	compile group: 'org.elasticsearch.client', name: 'rest', version: '5.5.3'
 	compile group: 'org.elasticsearch', name: 'elasticsearch-core', version: '6.5.2'

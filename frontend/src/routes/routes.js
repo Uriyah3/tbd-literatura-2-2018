@@ -1,9 +1,9 @@
 import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
-import UserProfile from "@/pages/UserProfile.vue";
+import Autores from "@/pages/Autores.vue";
 import TableList from "@/pages/TableList.vue";
-import Typography from "@/pages/Typography.vue";
+import Libros from "@/pages/Libros.vue";
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import Notifications from "@/pages/Notifications.vue";
@@ -21,9 +21,9 @@ const routes = [
         component: Dashboard
       },
       {
-        path: "user",
-        name: "User Profile",
-        component: UserProfile
+        path: "autores",
+        name: "Autores",
+        component: Autores
       },
       {
         path: "table",
@@ -31,9 +31,9 @@ const routes = [
         component: TableList
       },
       {
-        path: "typography",
-        name: "Typography",
-        component: Typography
+        path: "libros",
+        name: "Libros",
+        component: Libros
       },
       {
         path: "icons",
