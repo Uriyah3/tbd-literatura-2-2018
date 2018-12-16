@@ -1,6 +1,9 @@
 package com.tbd.elasticsearch.rest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tbd.elasticsearch.entities.Author;
 import com.tbd.elasticsearch.entities.Book;
+import com.tbd.elasticsearch.entities.Genre;
 import com.tbd.elasticsearch.repository.AuthorRepository;
 
 @CrossOrigin(maxAge=3600)
@@ -51,15 +55,44 @@ public class AuthorService {
 		return authorRepository.findByGenreId(id);
 	}
 	
+	
+	
+	
 	@RequestMapping(value = "/top", method = RequestMethod.GET)
-	public List<Author> topAuthor() {
-		return  authorRepository.findAllByOrderByHitsDesc();
+	public Map<String, ArrayList> topAuthor() {
+		HashMap<String, ArrayList> result = new HashMap<>();
+		ArrayList<Integer> data = new ArrayList<Integer>();
+        ArrayList<String> label = new ArrayList<String>();
+        
+		List<Author> lista= authorRepository.findAllByOrderByHitsDesc();
+		for (Author e : lista) {
+        	data.add(e.getHits());
+        	label.add(e.getName());
+		}
+		
+		result.put("data", data);
+        result.put("labels", label);
+		return  result;
 	}
 	
 	@RequestMapping(value = "/top/genero/{id}", method = RequestMethod.GET)
-	public List<Author> topBookGenre(@PathVariable("id") Long id) {
-		return  authorRepository.findByGenreIdOrderByHitsDesc(id);
+	public Map<String, ArrayList> topBookGenre(@PathVariable("id") Long id) {
+		HashMap<String, ArrayList> result = new HashMap<>();
+		ArrayList<Integer> data = new ArrayList<Integer>();
+        ArrayList<String> label = new ArrayList<String>();
+        
+        List<Author> lista=authorRepository.findByGenreIdOrderByHitsDesc(id);
+        for (Author e : lista) {
+        	data.add(e.getHits());
+        	label.add(e.getName());
+		}
+		
+		result.put("data", data);
+        result.put("labels", label);
+		return  result;
 	}
+	
+	
 	
 	
 }
