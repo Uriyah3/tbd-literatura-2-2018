@@ -55,5 +55,9 @@ dependencies {
 	compile group: 'org.elasticsearch.client', name: 'transport', version: '6.5.2'
 	compile group: 'org.elasticsearch.client', name: 'elasticsearch-rest-client-sniffer', version: '6.5.2'
     */
+    //
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch
+	//compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.3'
+	//implementation('org.springframework.boot:spring-boot-starter-data-elasticsearch')
 	
 }

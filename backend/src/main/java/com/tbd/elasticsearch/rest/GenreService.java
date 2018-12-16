@@ -1,6 +1,7 @@
 package com.tbd.elasticsearch.rest;
 
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tbd.elasticsearch.entities.Book;
 import com.tbd.elasticsearch.entities.Genre;
 import com.tbd.elasticsearch.repository.GenreRepository;
 
@@ -43,5 +45,10 @@ public class GenreService {
 	@ResponseBody
 	public Genre create(@RequestBody Genre resource) {
 	     return genreRepository.save(resource);
+	}
+	
+	@RequestMapping(value = "/top", method = RequestMethod.GET)
+	public List<Genre> topGenre() {
+		return  genreRepository.findAllByOrderByHitsDesc();
 	}
 }

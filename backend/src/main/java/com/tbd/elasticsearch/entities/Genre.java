@@ -13,7 +13,16 @@ public class Genre implements Serializable{
 	private Long id;
 	@Column(name="name", unique=true, nullable=false)
 	private String name;
+	@Column(name="hits")
+	private Integer hits;
 	
+	
+	public Integer getHits() {
+		return hits;
+	}
+	public void setHits(Integer hits) {
+		this.hits = hits;
+	}
 	public Long getId() {
 		return id;
 	}

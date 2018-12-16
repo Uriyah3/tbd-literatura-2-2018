@@ -2,20 +2,28 @@ package com.tbd.elasticsearch.moduloElasticSearch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-
+import com.tbd.elasticsearch.entities.Book;
 
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilders.*;
+import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.profile.ProfileShardResult;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +44,9 @@ public class TweetCortoDao {
 	private final String TYPE = "data";
 	private RestHighLevelClient restHighLevelClient;
 	private ObjectMapper objectMapper;
+	
+	
+    
 
 	public TweetCortoDao(ObjectMapper objectMapper, RestHighLevelClient restHighLevelClient) {
 		this.objectMapper = objectMapper;
@@ -56,6 +67,7 @@ public class TweetCortoDao {
 	}
 	
 	//Obtener todos los tweets
+	/*
 	public List<TweetCorto> getTweetsCortos(String texto) {
 		
 		List<TweetCorto> tweetLista = new ArrayList<TweetCorto>();
@@ -69,6 +81,15 @@ public class TweetCortoDao {
 		}
 		return tweetLista;
 	}
+	*/
+	
+	/*
+	public List<TweetCorto> findByText(String text){
+		
+    	return tweetCortoRepository.findByText("navidad");
+	  
+	}
+	*/
 	
 	
 	//Version de Alvaro
@@ -124,6 +145,31 @@ public class TweetCortoDao {
 		Map<String, Object> sourceAsMap = getResponse.getSourceAsMap();
 		return sourceAsMap;
 	}
+	
+	//Entrega cantidad de hits segun en libro a buscar
+	public Integer getCantidadHits(Book book){
+	
+		SearchRequest searchRequest = new SearchRequest(); 
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder(); 
+		sourceBuilder.query(QueryBuilders.termQuery("text", book.getName())); 
+		searchRequest.source(sourceBuilder);
+		
+		SearchResponse searchResponse=null;
+		  try {
+			  searchResponse = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+			   
+		  } catch (java.io.IOException e){
+		    e.getLocalizedMessage();
+		  }
+		  SearchHits hits = searchResponse.getHits();
+		  
+		  //System.out.printf("Cantida de Hits: %d" , searchResponse.getHits().totalHits );
+		  //System.out.println("------");
+		  Integer nHits=(int) searchResponse.getHits().totalHits;
+		  Map<String, ProfileShardResult> sourceAsMap = searchResponse.getProfileResults();
+				   
+		  return nHits;
+		}
 
 	public Map<String, Object> updateTweetCortoById(String id, TweetCorto tweet) {
 		UpdateRequest updateRequest = new UpdateRequest(INDEX, TYPE, id).fetchSource(true);

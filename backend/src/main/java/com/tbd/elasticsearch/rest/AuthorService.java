@@ -1,5 +1,6 @@
 package com.tbd.elasticsearch.rest;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tbd.elasticsearch.entities.Author;
+import com.tbd.elasticsearch.entities.Book;
 import com.tbd.elasticsearch.repository.AuthorRepository;
 
 @CrossOrigin(maxAge=3600)
@@ -42,4 +44,22 @@ public class AuthorService {
 	public Author create(@RequestBody Author resource) {
 	     return authorRepository.save(resource);
 	}
+	
+	@RequestMapping(value = "genre/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Author> findAuthorFromGenre(@PathVariable("id") Long id) {
+		return authorRepository.findByGenreId(id);
+	}
+	
+	@RequestMapping(value = "/top", method = RequestMethod.GET)
+	public List<Author> topAuthor() {
+		return  authorRepository.findAllByOrderByHitsDesc();
+	}
+	
+	@RequestMapping(value = "/top/genero/{id}", method = RequestMethod.GET)
+	public List<Author> topBookGenre(@PathVariable("id") Long id) {
+		return  authorRepository.findByGenreIdOrderByHitsDesc(id);
+	}
+	
+	
 }
