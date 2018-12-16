@@ -25,8 +25,5 @@ public class TweetService {
 	
 		return repository.findById(id);
 	}
-	
-	public List<Tweet> getTweetsElastic(){
-		return repository.findAll();
-	}
+
 }

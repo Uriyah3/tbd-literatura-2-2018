@@ -2,11 +2,12 @@ package com.tbd.mongo;
 
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.support.WriteRequest;
-import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,16 +19,15 @@ import java.net.HttpURLConnection;
 import java.net.InetAddress;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Elastic {
 
 
     TransportClient client = new PreBuiltTransportClient( Settings.EMPTY );
-    RestHighLevelClient restHighLevelClient;
-    private TweetService tweetService = new TweetService();
 
-    public void getTweets(int port){
+    public void putTweets(int port){
         try {
             String u = "http://localhost:" + port + "/tweets";
             URL url = new URL(u);
@@ -51,17 +51,30 @@ public class Elastic {
     }
 
 
-    public void prepare(String clusterName, String clusterIp, int clusterPort ) throws UnknownHostException {
-
-        Settings settings = Settings.builder()
-                .put("cluster.name", clusterName)
-                .put("client.transport.ignore_cluster_name", true)
-                .put("client.transport.sniff", true)
-                .build();
+    public void prepare(String clusterIp, int clusterPort ) throws UnknownHostException {
 
         client.addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(clusterIp), clusterPort));
-        getTweets(8082);
+
     }
+
+
+    public JSONObject searchBooks(List<String> text){
+        JSONObject result = new JSONObject();
+        ArrayList<Long> data = new ArrayList<Long>();
+        ArrayList<String> label = new ArrayList<String>();
+        for (String t:text) {
+            SearchResponse searchResponse = client.prepareSearch("twitter")
+                    .setQuery(QueryBuilders.matchQuery("text", t)).execute().actionGet();
+            System.out.printf("Se encontraron %d coincidencias con la palabra %s\n",searchResponse.getHits().totalHits,t);
+            System.out.println(searchResponse.toString());
+            data.add(searchResponse.getHits().totalHits);
+            label.add(t);
+        }
+        result.put("labels",label);
+        result.put("data",data);
+        return result;
+    }
+
 
     public boolean bulkInsert(String indexName, String indexType, JSONObject tweet ) throws IOException {
 
