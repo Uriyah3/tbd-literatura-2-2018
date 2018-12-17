@@ -2,7 +2,7 @@
 <div>
   <h2 class="text-center" style="padding-bottom:0;">Los 10 libros más populares</h2>
 
-  <div class="card" style="margin-top:-20px;">
+  <div class="card" style="margin-top:-10px;">
     <chartjs-pie v-bind:labels="labels"
       v-bind:datasets="datasets"
       v-bind:option="option"
