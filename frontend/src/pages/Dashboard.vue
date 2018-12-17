@@ -1,17 +1,11 @@
 <template>
   <div class="content">
     <div class="md-layout">
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
-        <chartjs-line/>
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
+        <chart-pie/>
       </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
-        <chart-doughnut/>
-      </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
+      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
         <chart-bar/>
-      </div>
-      <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-50">
-        <chart-line/>
       </div>
     </div>
   </div>
@@ -20,11 +14,11 @@
 <script>
 import ChartLine from "@/components/Charts/chart-line";
 import ChartBar from "@/components/Charts/chart-bar";
-import ChartDoughnut from "@/components/Charts/chart-doughnut";
+import ChartPie from "@/components/Charts/chart-pie";
 
 export default {
   components: {
-    ChartDoughnut,
+    ChartPie,
     ChartLine,
     ChartBar
   }

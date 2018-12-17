@@ -6,7 +6,7 @@ INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (5, 'La 
 INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (6, 'La Vuelta al Mundo en 80 Días', 1, 1,6);
 INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (7, 'Los Hijos del Capitán Grant', 1, 1,7);
 INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (8, 'Miguel Strogoff', 1, 1,8);
-INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (9, 'Don Quijote de la Mancha', 2, 1,9;
+INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (9, 'Don Quijote de la Mancha', 2, 1,9);
 INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (10, 'Los trabajos de Persiles y Sigismunda', 2, 1,10);
 INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (11, 'La Galatea', 2, 1,0);
 INSERT INTO `book` (`id`,`name`, `author_id`, `genre_id`,`hits`) VALUES (12, 'El Destino del Cazador', 3, 1,0);
