@@ -152,7 +152,8 @@ public class TweetCortoDao {
 	
 		SearchRequest searchRequest = new SearchRequest(); 
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder(); 
-		sourceBuilder.query(QueryBuilders.termQuery("text", book.getName())); 
+		sourceBuilder.query(QueryBuilders.simpleQueryStringQuery(book.getName()));
+
 		searchRequest.source(sourceBuilder);
 		
 		SearchResponse searchResponse=null;

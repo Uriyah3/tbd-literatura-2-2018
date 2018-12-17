@@ -34,9 +34,9 @@ export default {
     };
   },
   mounted() {
-    axios({ method: "GET", "url": "http://localhost:8082/book/top10" }).then(result => {
-      this.labels = result.data.labels;
-      this.datasets[0].data = result.data.data;
+    axios({ method: "GET", "url": "http://localhost:8082/book/top" }).then(result => {
+      this.labels = result.data.labels.slice(1,11);
+      this.datasets[0].data = result.data.data.slice(1,11);
     }, error => {
       console.error(error);
     });

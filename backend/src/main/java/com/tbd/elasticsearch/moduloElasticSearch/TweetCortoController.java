@@ -148,8 +148,9 @@ public class TweetCortoController {
     	
     	//Autores segun el genero
     	List <Author> listaAutores=new ArrayList<Author>();
-    	authorService.findAuthorFromGenre(genre.getId());
-    	
+		listaAutores = authorService.findAuthorFromGenre(genre.getId());
+
+
     	Integer counter=0;
     	for (Author author : listaAutores) {
     		counter=counter+hitsAuthor(author);
@@ -161,6 +162,8 @@ public class TweetCortoController {
     	updatedGenre.setId(genre.getId());
     	updatedGenre.setName(genre.getName());
     	updatedGenre.setHits(counter);
+		genreService.create(updatedGenre);
+
     	return counter;
     }
     
