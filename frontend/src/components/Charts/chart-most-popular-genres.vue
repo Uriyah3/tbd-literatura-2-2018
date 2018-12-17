@@ -1,8 +1,8 @@
 <template>
 <div>
-  <h2 class="text-center">Los 10 libros más populares</h2>
+  <h2 class="text-center" style="padding-bottom:0;">Géneros más populares</h2>
 
-  <div class="card">
+  <div class="card" style="margin-top:-20px;">
     <chartjs-pie v-bind:labels="labels"
       v-bind:datasets="datasets"
       v-bind:option="option"
@@ -21,7 +21,7 @@ export default {
       datasets: [
         {
           data: [],
-          backgroundColor: ["#79A8D8","#46A7C4","#19A2A9","#169B8A","#33926A","#4B874E","#5D7A36","#6B6D27","#755E21","#7A5023"]
+          backgroundColor: ["#EC9047","#D88440","#C4773A","#B16B33","#9E5F2D","#8C5426","#7A4820","#683D1A","#573314","#47280F"]
         }
       ],
       option: {
@@ -34,10 +34,9 @@ export default {
     };
   },
   mounted() {
-    axios({ method: "GET", "url": "http://localhost:8082/book/top10" }).then(result => {
+    axios({ method: "GET", "url": "http://localhost:8082/genre/top" }).then(result => {
       this.labels = result.data.labels;
       this.datasets[0].data = result.data.data;
-      console.log(result);
     }, error => {
       console.error(error);
     });

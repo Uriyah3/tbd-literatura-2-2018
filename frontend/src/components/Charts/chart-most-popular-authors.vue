@@ -1,13 +1,9 @@
 <template>
   <div>
-    <h2>Bar</h2>
+    <h2 class="text-center">Los 10 autores más populares</h2>
 
     <div class="card">
-      <canvas id="fooCanvas" count="1"></canvas>
-
-      <chartjs-bar v-for="(item, index) in types"
-      v-bind:key="index"
-      target="fooCanvas"
+      <chartjs-bar
       v-bind:beginzero="beginZero"
       v-bind:labels="labels"
       v-bind:datalabel="item.dataLabel"
@@ -27,25 +23,22 @@
       return {
         beginZero: true,
         labels: [],
-        types: [
+        item:
         {
           dataLabel: "Los 10 autores más populares",
           data: [],
-          bgColor: "#79A8D8",
-          borderColor: "#19A2A9"
+          bgColor: "#2985A2",
+          borderColor: "#0D3543"
         }
-        ]
       }
     },
     mounted() {
       axios({ method: "GET", "url": "http://localhost:8082/author/top" }).then(result => {
         this.labels = result.data.labels.slice(0,10);
-        this.types[0].data = result.data.data.slice(0,10);
-        console.log(result);
+        this.item.data = result.data.data.slice(0,10);
       }, error => {
         console.error(error);
       });
-    },
-    methods: { }
+    }
   }
 </script>
