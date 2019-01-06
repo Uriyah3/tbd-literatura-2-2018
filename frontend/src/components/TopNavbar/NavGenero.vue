@@ -20,7 +20,7 @@
               
             </md-list-item>
 
-            <md-list-item to="/generos">
+            <md-list-item to="/generos/rankings">
               <i class="material-icons" style="font-size:48px;">format_list_numbered</i>
               <p class="hidden-lg hidden-md">Dashboard</p>
             </md-list-item>            

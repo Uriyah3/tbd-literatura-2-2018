@@ -2,15 +2,20 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
 import Autores from "@/pages/Autores.vue";
+import Libros from "@/pages/Libros.vue";
 import Tiempo from "@/pages/Tiempo.vue";
 import Grafo from "@/pages/Grafo.vue";
 import Geo from "@/pages/Geo.vue";
-import TableList from "@/pages/TableList.vue";
-import Libros from "@/pages/Libros.vue";
+import ListAutor from "@/pages/Lists/ListAutor.vue";
+import ListLibro from "@/pages/Lists/ListLibro.vue";
+import ListGenero from "@/pages/Lists/ListGenero.vue";
+
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
+import TableList from "@/pages/TableList.vue";
 import Notifications from "@/pages/Notifications.vue";
 import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
+
 
 const routes = [
   {
@@ -20,13 +25,18 @@ const routes = [
     children: [
       {
         path: "generos",
-        name: "Dashboard",
+        name: "Géneros",
         component: Dashboard
       },
       {
         path: "autores",
         name: "Autores",
         component: Autores
+      },
+      {
+        path: "libros",
+        name: "Libros",
+        component: Libros
       },
       {
         path: "popularidad_temporal",
@@ -44,14 +54,24 @@ const routes = [
         component: Grafo
       },
       {
+        path: "autores/ranking",
+        name: "ListAutor",
+        component: ListAutor
+      },
+      {
+        path: "libros/ranking",
+        name: "ListLibro",
+        component: ListLibro
+      },
+      {
+        path: "generos/ranking",
+        name: "ListGenero",
+        component: ListGenero
+      },
+      {
         path: "table",
         name: "Table List",
         component: TableList
-      },
-      {
-        path: "libros",
-        name: "Libros",
-        component: Libros
       },
       {
         path: "icons",
