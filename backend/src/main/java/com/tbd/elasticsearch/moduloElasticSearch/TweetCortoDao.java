@@ -1,10 +1,8 @@
 package com.tbd.elasticsearch.moduloElasticSearch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbd.elasticsearch.entities.Book;
-
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
@@ -17,17 +15,14 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.profile.ProfileShardResult;
-import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-
-import java.text.*;
-import java.sql.*;
 
 
 @Repository
@@ -70,6 +65,33 @@ public class TweetCortoDao {
 		}
 		Map<String, Object> sourceAsMap = getResponse.getSourceAsMap();
 		return sourceAsMap;
+	}
+
+	public List<Map<String, Object>> getUsersTweeted(String book) {
+
+		SearchRequest searchRequest = new SearchRequest();
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		sourceBuilder.query(QueryBuilders.matchPhraseQuery("text_lower",book));
+		searchRequest.source(sourceBuilder);
+		SearchResponse searchResponse=null;
+		List<Map<String, Object>> result = new ArrayList<>();
+
+		try {
+			searchResponse = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+
+		} catch (java.io.IOException e){
+			e.getLocalizedMessage();
+		}
+		if (searchResponse.getHits().totalHits>0)
+			for (SearchHit hits:searchResponse.getHits()) {
+
+				Map<String, Object> hit = hits.getSourceAsMap();
+				Map<String,Object> user = (Map<String,Object>) hit.get("user");
+				result.add(user);
+			}
+
+
+		return result;
 	}
 	
 	//Entrega cantidad de hits segun en libro a buscar
