@@ -59,5 +59,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.data/spring-data-elasticsearch
 	//compile 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.3'
 	//implementation('org.springframework.boot:spring-boot-starter-data-elasticsearch')
+	//Sentimientos
+	compile('org.apache.opennlp:opennlp-tools:1.8.4')
 	
 }

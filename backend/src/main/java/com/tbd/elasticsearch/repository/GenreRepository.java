@@ -14,5 +14,7 @@ import com.tbd.elasticsearch.entities.Genre;
 public interface GenreRepository extends JpaRepository<Genre, Long>{
 	
 	public List <Genre> findAllByOrderByHitsDesc();
+
+	public Genre findByName(String name);
 	
 }

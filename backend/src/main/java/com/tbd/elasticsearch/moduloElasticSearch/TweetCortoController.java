@@ -1,5 +1,8 @@
 package com.tbd.elasticsearch.moduloElasticSearch;
 
+import com.tbd.elasticsearch.entities.User;
+import com.tbd.elasticsearch.moduloSentimentAnalysis.SentimentAnalysisController;
+import com.tbd.elasticsearch.rest.UserService;
 import org.elasticsearch.search.profile.ProfileShardResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -16,11 +19,12 @@ import com.tbd.elasticsearch.rest.BookService;
 import com.tbd.elasticsearch.rest.GenreService;
 
 
+import java.time.LocalDate;
+import java.util.*;
+import java.text.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.OffsetDateTime;
+import java.time.Instant;
 
 @ComponentScan
 @RestController
@@ -31,6 +35,9 @@ public class TweetCortoController {
 	
     @Autowired
     private TweetCortoDao tweetCortoDao;
+
+	@Autowired
+	private UserService userService;
     
     @Autowired
     private BookService bookService;
@@ -43,6 +50,9 @@ public class TweetCortoController {
     
     @Autowired
     private TweetService tweetService;
+
+	@Autowired
+	private SentimentAnalysisController sentimentService;
     
 
 
@@ -54,14 +64,78 @@ public class TweetCortoController {
     
     //Insertar datos de mongo en elastic
     @GetMapping("/insert")
-	public void armar(){
+	public void armar() throws ParseException {
 		List<Tweet> listaTweets=tweetService.getTweets();
 		for (Tweet tweet : listaTweets) {
+
+			//Datos de nuevo tweet a elasticsearch
 			TweetCorto tweetCorto=new TweetCorto();
 			tweetCorto.setText(tweet.getText());
+			tweetCorto.setText_lower(tweet.getText().toLowerCase());
+			tweetCorto.setFavoriteCount(tweet.getFavoriteCount());
+			tweetCorto.setRetweetCount(tweet.getRetweetCount());
+			tweetCorto.setCreated_at(tweet.getCreated_at());
+
+			//Conversion fecha
+			SimpleDateFormat sdf;
+			sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+			sdf.setTimeZone(TimeZone.getTimeZone("CET"));
+			String isofechaString = sdf.format(tweet.getCreated_at());
+			//System.out.println(isofechaString);
+
+			//fecha string yyyy-MM-dd
+			String fechaCorta=isofechaString.toString().replace('T',' ').substring(0,isofechaString.toString().length()-19);
+			tweetCorto.setFecha(fechaCorta);
+			//System.out.println(fechaCorta);
+
+			//Fecha en date sql
+			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+			Date parsed = format.parse(fechaCorta.replace("-",""));
+			java.sql.Date sql = new java.sql.Date(parsed.getTime());
+			tweetCorto.setDate(sql);
+
+			//Sentiment
+			HashMap<String,Double> datos=sentimentService.classify(tweet.getText());
+			Iterator<Double> lista=datos.values().iterator();
+
+			Double negative=lista.next();
+			Double positive=lista.next();
+
+			tweetCorto.setNegative(negative);
+			tweetCorto.setPositive(positive);
+
+			//Usuario
+			tweetCorto.setUser(tweet.getUser());
+
+			//Id para elasticsearch
 			Long idTweet=tweet.getId();
 			String idStr= String.valueOf(idTweet);
 			tweetCorto.setId(idStr);
+
+			//Ver de que libro se hablo
+			List<Book> listaLibros =(List) bookService.getAllFilms();
+			tweetCorto.setBook_id(-1L);
+			for (Book b:listaLibros) {
+
+				if(tweetCorto.getText_lower().contains(b.getName().toLowerCase())){
+					tweetCorto.setBook_id(b.getId());
+				}
+			}
+
+			//Agregando el usuario a mysql
+			List<User> listaUsuarios=(List)userService.getAllUser();
+			Integer found=-1;
+			for (User u:listaUsuarios) {
+				if (u.getId()==tweetCorto.getUser().getId()){
+					//userService.create(tweetCorto.getUser());
+					found=1;
+				}
+			}
+			if (found!=1){
+				userService.create(tweetCorto.getUser());
+			}
+
+
 			tweetCortoDao.insertTweetCorto(tweetCorto);
 		}
 	  
@@ -84,8 +158,8 @@ public class TweetCortoController {
     	
     	for (Book book : listaLibros) {
     		Integer hits=cantidadHits(book);
-    		System.out.printf("Cantida de Hits: %d\n" , hits );
-  		  	System.out.println("En libro: "+book.getName());
+    		System.out.printf(book.getName() + ":" + "%d" + "\n" , hits);
+  		  	System.out.println();
   		  	//
   		  	Book bookUpdated=new Book();
   		  	//Se setan los atributos
@@ -171,11 +245,11 @@ public class TweetCortoController {
     //Actualizar todos los Generos
     @GetMapping("/updateGenre")
     public void updateGenre() {
-    	
+
     	//Todos los generos
     	List <Genre> listaGeneros=new ArrayList<Genre>();
     	listaGeneros=(List<Genre>) genreService.getAllFilms();
-    	
+
     	for (Genre genre : listaGeneros) {
     		hitsGenre(genre);
     	
@@ -208,6 +282,261 @@ public class TweetCortoController {
         return result;
     }
     */
+
+
+    //Metodo para calcular segun analisis de sentimientos segun texto
+	@GetMapping("/getBookFeelByName/{text}")
+	public Map<String, ArrayList> getBookFeelText(@PathVariable String text){
+
+		Book book=new Book();
+		book.setName(text);
+
+
+		return tweetCortoDao.getBookSentiment(book);
+	}
+
+	//Sentimiento de libro segun id
+	@GetMapping("/getBookFeelById/{id}")
+	public Map<String, ArrayList> getBookFeelId(@PathVariable Long id){
+
+		Optional<Book> book=bookService.findOne(id);
+
+		return tweetCortoDao.getBookSentiment(book.get());
+	}
+
+
+
+	//Sentimiento autor segun sus libros (por texto)
+	@GetMapping("/getAuthorFeelByName/{name}")
+	public Map<String, ArrayList> getAuthorFeelName(@PathVariable String name){
+
+
+		//Todos los libros del autor
+		Author autor=authorService.findOneByName(name);
+		List<Book> listaLibros=bookService.BookAuthor(autor.getId());
+
+
+		Integer contadorPositivo=0;
+		Integer contadorNegativo=0;
+		Integer contadorNeutro=0;
+		for (Book b:listaLibros){
+			Map<String, ArrayList> dataElastic=tweetCortoDao.getBookSentiment(b);
+
+			ArrayList<Integer> dataNum= dataElastic.get("data");
+			contadorPositivo=contadorPositivo+dataNum.get(0);
+			contadorNegativo=contadorNegativo+dataNum.get(1);
+			contadorNeutro=contadorNeutro+dataNum.get(2);
+		}
+
+		//Armar el json
+		HashMap<String, ArrayList> result = new HashMap<>();
+
+		ArrayList<String> label = new ArrayList<String>();
+		label.add("Positivo");
+		label.add("Negativo");
+		label.add("Neutro");
+
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(contadorPositivo);
+		data.add(contadorNegativo);
+		data.add(contadorNeutro);
+
+		result.put("labels", label);
+		result.put("data", data);
+
+
+		return result;
+
+
+	}
+
+
+	//Sentimiento autor segun sus libros (por id)
+	@GetMapping("/getAuthorFeelById/{id}")
+	public Map<String, ArrayList> getAuthorFeelId(@PathVariable Long id){
+
+		List<Book> listaLibros=bookService.BookAuthor(id);
+
+
+		Integer contadorPositivo=0;
+		Integer contadorNegativo=0;
+		Integer contadorNeutro=0;
+		for (Book b:listaLibros){
+			Map<String, ArrayList> dataElastic=tweetCortoDao.getBookSentiment(b);
+
+			ArrayList<Integer> dataNum= dataElastic.get("data");
+			contadorPositivo=contadorPositivo+dataNum.get(0);
+			contadorNegativo=contadorNegativo+dataNum.get(1);
+			contadorNeutro=contadorNeutro+dataNum.get(2);
+		}
+
+		//Armar el json
+		HashMap<String, ArrayList> result = new HashMap<>();
+
+		ArrayList<String> label = new ArrayList<String>();
+		label.add("Positivo");
+		label.add("Negativo");
+		label.add("Neutro");
+
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(contadorPositivo);
+		data.add(contadorNegativo);
+		data.add(contadorNeutro);
+
+		result.put("labels", label);
+		result.put("data", data);
+
+
+		return result;
+
+
+	}
+
+
+	//Sentimiento genero segun autores
+	@GetMapping("/getGenreFeelByName/{name}")
+	public Map<String, ArrayList> getGenreFeelName(@PathVariable String name){
+
+
+		//Todos los autores segun genero
+		Genre genero=genreService.genreByName(name);
+		List<Author> listaAuthor=authorService.findAuthorFromGenre(genero.getId());
+
+
+		Integer contadorPositivo=0;
+		Integer contadorNegativo=0;
+		Integer contadorNeutro=0;
+		for (Author a:listaAuthor){
+			Map<String, ArrayList> dataElastic=getAuthorFeelId(a.getId());
+
+			ArrayList<Integer> dataNum= dataElastic.get("data");
+			contadorPositivo=contadorPositivo+dataNum.get(0);
+			contadorNegativo=contadorNegativo+dataNum.get(1);
+			contadorNeutro=contadorNeutro+dataNum.get(2);
+		}
+
+		//Armar el json
+		HashMap<String, ArrayList> result = new HashMap<>();
+
+		ArrayList<String> label = new ArrayList<String>();
+		label.add("Positivo");
+		label.add("Negativo");
+		label.add("Neutro");
+
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(contadorPositivo);
+		data.add(contadorNegativo);
+		data.add(contadorNeutro);
+
+		result.put("labels", label);
+		result.put("data", data);
+
+
+		return result;
+
+
+	}
+
+	//Sentimiento genero segun autores
+	@GetMapping("/getGenreFeelById/{id}")
+	public Map<String, ArrayList> getGenreFeelName(@PathVariable Long id){
+
+		//Todos los autores segun genero
+		List<Author> listaAuthor=authorService.findAuthorFromGenre(id);
+
+		Integer contadorPositivo=0;
+		Integer contadorNegativo=0;
+		Integer contadorNeutro=0;
+		for (Author a:listaAuthor){
+			Map<String, ArrayList> dataElastic=getAuthorFeelId(a.getId());
+
+			ArrayList<Integer> dataNum= dataElastic.get("data");
+			contadorPositivo=contadorPositivo+dataNum.get(0);
+			contadorNegativo=contadorNegativo+dataNum.get(1);
+			contadorNeutro=contadorNeutro+dataNum.get(2);
+		}
+
+		//Armar el json
+		HashMap<String, ArrayList> result = new HashMap<>();
+
+		ArrayList<String> label = new ArrayList<String>();
+		label.add("Positivo");
+		label.add("Negativo");
+		label.add("Neutro");
+
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(contadorPositivo);
+		data.add(contadorNegativo);
+		data.add(contadorNeutro);
+
+		result.put("labels", label);
+		result.put("data", data);
+
+
+		return result;
+
+
+	}
+
+	//Para calcular la cantidad de hits por fecha
+	@GetMapping("/getDate")
+	public Map<String, ArrayList> getDateTweets() throws ParseException {
+
+		//Desde el 21 de diciembre hasta hoy
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+		Date parsedI = format.parse("20181221");
+		java.sql.Date fecha = new java.sql.Date(parsedI.getTime());
+
+		java.sql.Date hoy=new java.sql.Date(Calendar.getInstance().getTime().getTime());
+		System.out.println(hoy);
+
+		//Datos para salida
+		HashMap<String, ArrayList> result = new HashMap<>();
+		ArrayList<String> label = new ArrayList<String>();
+		ArrayList<Integer> data = new ArrayList<Integer>();
+
+
+
+		Integer i=0;
+		Integer hits=0;
+		while(!fecha.after(hoy)) {
+
+			label.add(fecha.toString());
+			hits=tweetCortoDao.getDataDate(fecha.toString());
+			data.add(hits);
+			System.out.println(hits);
+
+
+			LocalDate localdate=fecha.toLocalDate();
+			String sig=localdate.plusDays(1).toString();
+
+			Date parsed = format.parse(fecha.toString());
+			fecha = new java.sql.Date(parsed.getTime());
+
+			//Sig
+			Date parsed2 = format.parse(sig.replace("-",""));
+			fecha= new java.sql.Date(parsed2.getTime());
+
+		}
+
+		result.put("labels", label);
+		result.put("data", data);
+
+
+		return result;
+
+	}
+
+	@GetMapping("/getAll")
+	public void getAll(){
+		tweetCortoDao.getAll();
+	}
+
+
+
+
+
+
     
 	@GetMapping("/{id}")
 	public Map<String, Object> getBookById(@PathVariable String id){
