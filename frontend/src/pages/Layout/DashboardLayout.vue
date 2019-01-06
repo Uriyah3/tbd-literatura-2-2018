@@ -17,6 +17,22 @@
         <md-icon>library_books</md-icon>
         <p>Libros</p>
       </sidebar-link>
+
+      <sidebar-link to="/popularidad_temporal">
+        <md-icon>timeline</md-icon>
+        <p>Popularidad temporal</p>
+      </sidebar-link>
+
+<!--
+      <sidebar-link to="/geo_espacial">
+        <md-icon>location_on</md-icon>
+        <p>Usuarios Twitter</p>
+      </sidebar-link>
+-->
+      <sidebar-link to="/relaciones_de_usuarios_y_sus_tweets">
+        <md-icon>group_work</md-icon>
+        <p>Grafo usuarios/géneros</p>
+      </sidebar-link>
       
       
     </side-bar>

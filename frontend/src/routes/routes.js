@@ -2,6 +2,9 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
 import Autores from "@/pages/Autores.vue";
+import Tiempo from "@/pages/Tiempo.vue";
+import Grafo from "@/pages/Grafo.vue";
+import Geo from "@/pages/Geo.vue";
 import TableList from "@/pages/TableList.vue";
 import Libros from "@/pages/Libros.vue";
 import Icons from "@/pages/Icons.vue";
@@ -24,6 +27,21 @@ const routes = [
         path: "autores",
         name: "Autores",
         component: Autores
+      },
+      {
+        path: "popularidad_temporal",
+        name: "Tiempo",
+        component: Tiempo
+      },
+      {
+        path: "geo_espacial",
+        name: "Geo",
+        component: Geo
+      },
+      {
+        path: "relaciones_de_usuarios_y_sus_tweets",
+        name: "Grafo",
+        component: Grafo
       },
       {
         path: "table",
