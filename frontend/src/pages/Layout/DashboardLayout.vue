@@ -4,7 +4,7 @@
 
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/dashboard">
+      <sidebar-link to="/generos">
         <md-icon>dashboard</md-icon>
         <p>Géneros</p>
       </sidebar-link>
