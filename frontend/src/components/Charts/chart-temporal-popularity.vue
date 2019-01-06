@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h2 class="text-center" style="padding-bottom:0;">Popularidad de la literatura últimamente</h2>
+  <h2 class="text-center" style="padding-bottom:0;margin-top:20px;margin-bottom:0;">Popularidad de la literatura últimamente</h2>
 
   <div class="card">
     <header>
