@@ -20,7 +20,7 @@
               
             </md-list-item>
 
-            <md-list-item to="/libros/rankings">
+            <md-list-item to="/libros/ranking">
               <i class="material-icons" style="font-size:48px;">format_list_numbered</i>
               <p class="hidden-lg hidden-md">Libros</p>
             </md-list-item>            
