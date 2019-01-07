@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import com.tbd.elasticsearch.entities.Author;
 import org.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,13 @@ public class GenreService {
         result.put("data", data);
         result.put("labels", label);
 		return  result;
+	}
+
+	@RequestMapping(value = "/one/genre/{name}", method = RequestMethod.GET)
+	public Genre genreByName(@PathVariable("name") String name) {
+
+		Genre genero=  genreRepository.findByName(name);
+		return genero;
 	}
 	
 	

@@ -402,7 +402,7 @@ INSERT INTO `genre` (`id`, `hits`, `name`) VALUES
 (8, 229119, 'romance'),
 (9, 255360, 'terror');
 
---
+--varchar(255),
 -- Indexes for dumped tables
 --
 

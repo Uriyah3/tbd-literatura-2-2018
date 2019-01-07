@@ -157,7 +157,17 @@ public class BookService {
 	        result.put("labels", label);
 			return  result;
 	}
-	
+
+
+
+	@RequestMapping(value = "/all/autor/{id}", method = RequestMethod.GET)
+	public List<Book> BookAuthor(@PathVariable("id") Long id) {
+
+		List<Book> lista=  bookRepository.findByAuthorIdOrderByHitsDesc(id);
+		return lista;
+	}
+
+
 	
 	
 	
