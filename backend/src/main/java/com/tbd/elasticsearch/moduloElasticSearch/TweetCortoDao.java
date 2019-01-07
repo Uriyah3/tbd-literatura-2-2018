@@ -90,7 +90,7 @@ public class TweetCortoDao {
 				result.add(user);
 			}
 
-
+		System.out.println(result);
 		return result;
 	}
 	

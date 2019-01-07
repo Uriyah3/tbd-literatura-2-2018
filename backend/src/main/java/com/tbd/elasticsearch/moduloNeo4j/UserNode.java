@@ -8,6 +8,7 @@ import org.neo4j.ogm.annotation.Relationship;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @NodeEntity
 public class UserNode {
@@ -23,12 +24,14 @@ public class UserNode {
     private boolean isVerified;
     private String location;
     private Integer score;
-
+    //private List<Tweeted> tweets;
     @Relationship(type = "Tweeted_about")
     private List<BookNode> books = new ArrayList<>();
 
     @Relationship(type = "Tweeted_about")
-    private List<GenreNode> genre = new ArrayList<>();
+    private List<GenreNode> genres = new ArrayList<>();
+
+
 
 
     public UserNode(){
@@ -46,10 +49,24 @@ public class UserNode {
         this.score = score;
     }
 
-    public void tweeted(BookNode bookNode){
+    public void tweetedBook(BookNode bookNode){
         books.add(bookNode);
     }
 
+    public void tweetedGenre(GenreNode genreNode){
+        genres.add(genreNode);
+    }
+/*
+
+    public void setTweets(List<Tweeted> tweets) {
+        this.tweets = tweets;
+    }
+
+    public void addTweets(Tweeted tweet){
+        if (this.tweets == null)
+            this.tweets = new ArrayList<>();
+        this.tweets.add(tweet);
+    }*/
     public Long getId() {
         return id;
     }
@@ -68,5 +85,14 @@ public class UserNode {
 
     public int getFriendsCount() {
         return friendsCount;
+    }
+
+    public List<BookNode> getBooks() {
+        return books;
+    }
+
+
+    public List<GenreNode> getGenres() {
+        return genres;
     }
 }

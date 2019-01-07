@@ -8,7 +8,9 @@ import java.util.Collection;
 
 public interface UserRepositoryNeo4j extends Neo4jRepository<UserNode, Long> {
 
-    UserNode findByName(@Param("name") String name);
+    UserNode findByName(String name);
+
+    UserNode findByScreenName(String screenName);
 
     Collection<UserNode> findAll();
 

@@ -1,7 +1,10 @@
 package com.tbd.elasticsearch.moduloNeo4j;
 
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 import java.util.List;
@@ -46,9 +49,31 @@ public class Neo4jController {
         return this.userServiceNeo4j.findByName(name);
     }
 
-    @GetMapping("/tweetedBook")
-    public Collection<UserNode> tweetedBook(@RequestParam String name){
-        return this.userServiceNeo4j.tweetedBook(name);
+    @GetMapping("/users")
+    public Collection<UserNode> findAllUsers(){
+        return this.userServiceNeo4j.getAllUsers();
+    }
+
+    @GetMapping("/testBook")
+    public List<BookNode> findBooksByUsers(@RequestParam String screenName){
+        UserNode userNode = userServiceNeo4j.findByScreenName(screenName);
+        if (userNode!=null)
+            return userNode.getBooks();
+        return null;
+
+    }
+    @GetMapping("/testGenre")
+    public List<GenreNode> findGenresByUsers(@RequestParam String screenName){
+        UserNode userNode = userServiceNeo4j.findByScreenName(screenName);
+        if (userNode!=null)
+            return userNode.getGenres();
+        return null;
+
+    }
+
+    @GetMapping("/genres")
+    public Collection<GenreNode> findAllGenres(){
+        return genreServiceNeo4j.findAllGenres();
     }
 
     @GetMapping("/tweetedGenre")
@@ -56,9 +81,19 @@ public class Neo4jController {
         return this.userServiceNeo4j.tweetedGenre(name);
     }
 
+    @GetMapping("/users/Genre")
+    public Collection<UserNode> insertGenreTweeted(){
+        return this.genreServiceNeo4j.insertUsersGenreTweeted();
+    }
+
+    @GetMapping("/tweetedBook")
+    public Collection<UserNode> tweetedBook(@RequestParam String name){
+        return this.userServiceNeo4j.tweetedBook(name);
+    }
+
     @GetMapping("/users/book")
-    public List<Map<String,Object>> getBookTweeted(@RequestParam String title){
-        return this.bookServiceNeo4j.insertUsersTweeted(title);
+    public Collection<UserNode> insertBookTweeted(){
+        return this.bookServiceNeo4j.insertUsersBookTweeted();
     }
 
     @GetMapping("/book")
@@ -70,4 +105,12 @@ public class Neo4jController {
     public Collection<BookNode> findAllBooks(){
         return this.bookServiceNeo4j.findAll();
     }
+/*
+    @GetMapping("/graphBook")
+    public Map<String, Object> graphBooks(@RequestParam(value = "limit",required = false) Integer limit) {
+        return bookServiceNeo4j.graphBookNode(limit == null ? 100 : limit);
+    }
+
+
+*/
 }

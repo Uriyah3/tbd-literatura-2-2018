@@ -27,6 +27,11 @@ public class UserServiceNeo4j {
     }
 
     @Transactional(readOnly = true)
+    public UserNode findByScreenName(String screenName){
+        return userRepositoryNeo4j.findByScreenName(screenName);
+    }
+
+    @Transactional(readOnly = true)
     public Collection<UserNode> tweetedBook(String name) {
         return userRepositoryNeo4j.tweetedBook(name);
     }
@@ -34,6 +39,11 @@ public class UserServiceNeo4j {
     @Transactional(readOnly = true)
     public Collection<UserNode> tweetedGenre(String name) {
         return userRepositoryNeo4j.tweetedGenre(name);
+    }
+
+    @Transactional(readOnly = true)
+    public  Collection<UserNode> getAllUsers(){
+        return userRepositoryNeo4j.findAll();
     }
 
     public UserNode updateUser(UserNode userNode){
@@ -46,7 +56,7 @@ public class UserServiceNeo4j {
 
         if(!userRepositoryNeo4j.findAll().isEmpty())
             userRepositoryNeo4j.deleteAll();
-        List<User> users = userRepository.findAll().subList(0,1000);
+        List<User> users = userRepository.findAll();//ByOrderByScoreDesc();
         UserNode userNode;
         int i = 0;
         for (User user:users) {

@@ -18,8 +18,8 @@ public class BookNode {
     private String title;
     private String author;
 
-
-   /* @JsonIgnoreProperties("BookNode")
+/*
+    @JsonIgnoreProperties("BookNode")
     @Relationship(type = "Tweeted_about", direction = Relationship.INCOMING)
     private List<String> tweets;
 */
