@@ -48,6 +48,7 @@
 </template> 
 <style lang="scss">
 </style>
+
 <script>
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";

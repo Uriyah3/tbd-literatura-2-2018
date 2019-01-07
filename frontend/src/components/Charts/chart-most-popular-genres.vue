@@ -41,7 +41,7 @@ export default {
       for(var i = 0; i < 9; i++) {
         hits += this.datasets[0].data[i];
       }
-      for(var i = 0; i < 9; i++) {
+      for(i = 0; i < 9; i++) {
         this.labels[i] += " " + (this.datasets[0].data[i] / hits * 100).toFixed(2) + "%";
       }
     }, error => {

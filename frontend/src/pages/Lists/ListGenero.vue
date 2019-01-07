@@ -42,22 +42,17 @@
 
 
 <script>
-import ChartMostPopularAuthors from "@/components/Charts/chart-most-popular-authors";
 import TopNavbar from "@/components/TopNavbar/NavGenero";
 import axios from "axios";
 
 export default {
-   
-    
   components: {
-    ChartMostPopularAuthors,
     TopNavbar
   },
-   data()
-    {
-        return {
-            generos: []
-        };
+   data() {
+      return {
+        generos: []
+      };
     },
     mounted() {
     axios({ method: "GET", "url": "http://192.168.0.21:8082/genre" }).then(result => {
