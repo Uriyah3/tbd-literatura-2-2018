@@ -25,13 +25,20 @@ public class Neo4jController {
     }
 
     @GetMapping("/insertData")
-    public void insertBooks() {
+    public void insertData() {
         bookServiceNeo4j.insertBooks();
         System.out.println("Libros insertados\n");
         genreServiceNeo4j.insertGenres();
         System.out.println("Generos insertados\n");
         userServiceNeo4j.insertUsers();
         System.out.println("usuarios insertados\n");
+        bookServiceNeo4j.insertUsersBookTweeted();
+        genreServiceNeo4j.insertUsersGenreTweeted();
+    }
+
+    @GetMapping("/insertBooks")
+    public void insertBooks() {
+        bookServiceNeo4j.insertBooks();
     }
 
     @GetMapping("/insertGenres")
@@ -81,20 +88,12 @@ public class Neo4jController {
         return this.userServiceNeo4j.tweetedGenre(name);
     }
 
-    @GetMapping("/users/Genre")
-    public Collection<UserNode> insertGenreTweeted(){
-        return this.genreServiceNeo4j.insertUsersGenreTweeted();
-    }
 
     @GetMapping("/tweetedBook")
     public Collection<UserNode> tweetedBook(@RequestParam String name){
         return this.userServiceNeo4j.tweetedBook(name);
     }
 
-    @GetMapping("/users/book")
-    public Collection<UserNode> insertBookTweeted(){
-        return this.bookServiceNeo4j.insertUsersBookTweeted();
-    }
 
     @GetMapping("/book")
     public BookNode findBookByTitle(@RequestParam String title){
@@ -105,12 +104,16 @@ public class Neo4jController {
     public Collection<BookNode> findAllBooks(){
         return this.bookServiceNeo4j.findAll();
     }
-/*
+
     @GetMapping("/graphBook")
     public Map<String, Object> graphBooks(@RequestParam(value = "limit",required = false) Integer limit) {
-        return bookServiceNeo4j.graphBookNode(limit == null ? 100 : limit);
+        return userServiceNeo4j.graph(limit == null ? 100 : limit,"book");
+    }
+    @GetMapping("/graphGenre")
+    public Map<String, Object> graphGenres(@RequestParam(value = "limit",required = false) Integer limit) {
+        return userServiceNeo4j.graph(limit == null ? 100 : limit,"genre");
     }
 
 
-*/
+
 }

@@ -7,8 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+
+import static org.neo4j.ogm.session.Utils.map;
 
 @Service
 public class UserServiceNeo4j {
@@ -17,6 +18,12 @@ public class UserServiceNeo4j {
     private UserRepository userRepository;
 
     private UserRepositoryNeo4j userRepositoryNeo4j;
+
+    @Autowired
+    private BookRepositoryNeo4j bookRepositoryNeo4j;
+
+    @Autowired
+    private GenreRepositoryNeo4j genreRepositoryNeo4j;
 
     public UserServiceNeo4j(UserRepositoryNeo4j userRepositoryNeo4j) {
         this.userRepositoryNeo4j = userRepositoryNeo4j;
@@ -69,6 +76,51 @@ public class UserServiceNeo4j {
         return userRepositoryNeo4j.findAll();
     }
 
+
+    private Map<String, Object> toD3Format(Collection<UserNode> userNodes,String type) {
+        List<Map<String, Object>> nodes = new ArrayList<>();
+        List<Map<String, Object>> rels = new ArrayList<>();
+        int i = 0;
+        Iterator<UserNode> result = userNodes.iterator();
+        while (result.hasNext()) {
+            UserNode userNode = result.next();
+            nodes.add(map("name", userNode.getScreenName(), "label", "user"));
+            int target = i;
+            i++;
+            if (type.equals("book")) {
+                System.out.println(userNode.getBooks().size());
+                for (BookNode bookNode : userNode.getBooks()) {
+                    Map<String, Object> book = map("title", bookNode.getTitle(), "label", "book");
+                    int source = nodes.indexOf(book);
+                    if (source == -1) {
+                        nodes.add(book);
+                        source = i++;
+                    }
+                    rels.add(map("source", target, "target", source));
+                }
+            }
+            else{
+                for (GenreNode genreNode : userNode.getGenres()) {
+                    Map<String, Object> genre = map("title", genreNode.getName(), "label", "genre");
+                    int source = nodes.indexOf(genre);
+                    if (source == -1) {
+                        nodes.add(genre);
+                        source = i++;
+                    }
+                    rels.add(map("source", target, "target", source));
+                }
+            }
+        }
+        return map("nodes", nodes, "links", rels);
+    }
+
+
+    public Map<String, Object>  graph(int limit,String type) {
+        Collection<UserNode> result = userRepositoryNeo4j.graphBook(limit);
+        bookRepositoryNeo4j.graphBook(limit);
+        genreRepositoryNeo4j.graph(limit);
+        return toD3Format(result,type);
+    }
 
 
 }

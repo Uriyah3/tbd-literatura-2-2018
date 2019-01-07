@@ -20,4 +20,7 @@ public interface UserRepositoryNeo4j extends Neo4jRepository<UserNode, Long> {
     @Query("MATCH (x:GenreNode)<-[Tweeted_about]-(u:UserNode) RETURN u,x")
     Collection<UserNode> tweetedGenre(@Param("name") String name);
 
+    @Query("MATCH (b:BookNode)<-[Tweeted_about]-(u:UserNode) RETURN b,u LIMIT {limit}")
+    Collection<UserNode> graphBook(@Param("limit") int limit);
+
 }

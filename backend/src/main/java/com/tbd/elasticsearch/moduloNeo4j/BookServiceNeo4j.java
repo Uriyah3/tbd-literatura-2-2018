@@ -60,44 +60,16 @@ public class BookServiceNeo4j {
             for (Map<String, Object> user:users) {
                 System.out.println(user);
                 userTweeted = userServiceNeo4j.findByScreenName(user.get("screenName").toString());
-                userTweeted.tweetedBook(bookRepositoryNeo4j.findByTitle(book.getTitle()));
-                userRepositoryNeo4j.save(userTweeted);
-                //this.userServiceNeo4j.updateUser(userTweeted);
+                if(userTweeted != null) {
+                    userTweeted.tweetedBook(bookRepositoryNeo4j.findByTitle(book.getTitle()));
+                    this.userServiceNeo4j.updateUser(userTweeted);
+                }
             }
         }
         return userServiceNeo4j.getAllUsers();
 
     }
 
-/*
-    private Map<String, Object> toD3Format(Collection<BookNode> bookNodes) {
-        List<Map<String, Object>> nodes = new ArrayList<>();
-        List<Map<String, Object>> rels = new ArrayList<>();
-        int i = 0;
-        Iterator<BookNode> result = bookNodes.iterator();
-        while (result.hasNext()) {
-            BookNode bookNode = result.next();
-            nodes.add(map("title", bookNode.getTitle(), "label", "book"));
-            int target = i;
-            i++;
-            for (Tweeted tweeted: bookNode.getTweets()) {
-                Map<String, Object> user = map("title", tweeted.getUserNode().getScreenName(), "label", "actor");
-                int source = nodes.indexOf(user);
-                if (source == -1) {
-                    nodes.add(user);
-                    source = i++;
-                }
-                rels.add(map("source", source, "target", target));
-            }
-        }
-        return map("nodes", nodes, "links", rels);
-    }
-
-    public Map<String, Object>  graphBookNode(int limit) {
-        Collection<BookNode> result = bookRepositoryNeo4j.graphBook(limit);
-        return toD3Format(result);
-    }
-*/
     public BookServiceNeo4j(BookRepositoryNeo4j bookRepositoryNeo4j){
         this.bookRepositoryNeo4j = bookRepositoryNeo4j;
     }

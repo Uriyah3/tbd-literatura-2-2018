@@ -12,7 +12,7 @@ public interface BookRepositoryNeo4j extends Neo4jRepository<BookNode,Long> {
     BookNode findByTitle(String title);
 
 
-    @Query("MATCH (b:BookNode)<-[r:Tweeted_about]-(u:User) RETURN b,r,u LIMIT {limit}")
+    @Query("MATCH (b:BookNode)<-[r:Tweeted_about]-(u:UserNode) RETURN b,r,u LIMIT {limit}")
     Collection<BookNode> graphBook(@Param("limit") int limit);
 
 }
