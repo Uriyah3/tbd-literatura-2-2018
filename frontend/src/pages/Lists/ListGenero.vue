@@ -43,7 +43,7 @@
 
 <script>
 import ChartMostPopularAuthors from "@/components/Charts/chart-most-popular-authors";
-import TopNavbar from "@/components/TopNavbar/NavAutor";
+import TopNavbar from "@/components/TopNavbar/NavGenero";
 import axios from "axios";
 
 export default {
