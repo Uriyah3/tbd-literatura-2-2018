@@ -1,15 +1,13 @@
 package com.tbd.elasticsearch.moduloNeo4j;
 
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(maxAge=3600)
 @RestController
 @RequestMapping("/neo4j")
 public class Neo4jController {
@@ -112,6 +110,10 @@ public class Neo4jController {
     @GetMapping("/graphGenre")
     public Map<String, Object> graphGenres(@RequestParam(value = "limit",required = false) Integer limit) {
         return userServiceNeo4j.graph(limit == null ? 100 : limit,"genre");
+    }
+    @GetMapping("/graph")
+    public Map<String, Object> graph(@RequestParam(value = "limit",required = false) Integer limit) {
+        return userServiceNeo4j.graph(limit == null ? 100 : limit,"all");
     }
 
 

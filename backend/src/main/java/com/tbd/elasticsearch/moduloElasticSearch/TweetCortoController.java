@@ -26,6 +26,7 @@ import java.text.*;
 import java.time.OffsetDateTime;
 import java.time.Instant;
 
+@CrossOrigin(maxAge=3600)
 @ComponentScan
 @RestController
 @EnableAutoConfiguration
@@ -264,8 +265,12 @@ public class TweetCortoController {
 	  updateAuthor();
 	  updateGenre();
 	}
-    
-    
+
+
+
+
+
+
     
     //Metodos para crear JSON
     /*public JSONObject top10libros() {
@@ -282,6 +287,93 @@ public class TweetCortoController {
         return result;
     }
     */
+
+
+	@GetMapping("/updateBookSentiment")
+	public void updateBookSentiment(){
+
+		List <Book> listBook= (List) bookService.getAllFilms();
+
+		for (Book b:listBook) {
+			List<Integer> data= tweetCortoDao.getBookSentimentList(b);
+				b.setPositivo(data.get(0));
+				b.setNegativo(data.get(1));
+				b.setNeutro(data.get(2));
+				bookService.create(b);
+		}
+
+	}
+
+	@GetMapping("/updateAuthorSentiment")
+	public void updateAuthorSentiment(){
+
+		//Todos los autores
+		List<Author> listAuthor=(List) authorService.getAllFilms();
+
+		for (Author a: listAuthor){
+
+			//Sacar los libros por autores
+			List<Book> listBook=(List) bookService.bookFromAuthor(a.getId());
+			Integer countPositive=0;
+			Integer countNegative=0;
+			Integer countNeutral=0;
+
+			for (Book b:listBook){
+				List<Integer> data= tweetCortoDao.getBookSentimentList(b);
+				countPositive=countPositive+data.get(0);
+				countNegative=countNegative+data.get(1);
+				countNeutral=countNeutral+data.get(2);
+			}
+
+			a.setPositivo(countPositive);
+			a.setNegativo(countNegative);
+			a.setNeutro(countNeutral);
+
+			authorService.create(a);
+
+		}
+
+	}
+
+	@GetMapping("/updateGenreSentiment")
+	public void updateGenreSentiment(){
+
+		//Todos los generos
+		List<Genre> listGenre=(List) genreService.getAllFilms();
+
+		for (Genre g: listGenre){
+
+			//Sacar los autores por autor
+			List<Author> listAuthor=(List) authorService.findAuthorFromGenre(g.getId());
+			Integer countPositive=0;
+			Integer countNegative=0;
+			Integer countNeutral=0;
+
+			for (Author a:listAuthor){
+
+				countPositive=countPositive+a.getPositivo();
+				countNegative=countNegative+a.getNegativo();
+				countNeutral=countNeutral+a.getNeutro();
+			}
+
+			g.setPositivo(countPositive);
+			g.setNegativo(countNegative);
+			g.setNeutro(countNeutral);
+
+			genreService.create(g);
+
+		}
+
+	}
+
+
+	@GetMapping("/updateAllSentiment")
+	public void updateAllSentiment(){
+
+		updateBookSentiment();
+		updateAuthorSentiment();
+		updateGenreSentiment();
+	}
 
 
     //Metodo para calcular segun analisis de sentimientos segun texto
@@ -303,6 +395,7 @@ public class TweetCortoController {
 
 		return tweetCortoDao.getBookSentiment(book.get());
 	}
+
 
 
 
@@ -397,7 +490,6 @@ public class TweetCortoController {
 	@GetMapping("/getGenreFeelByName/{name}")
 	public Map<String, ArrayList> getGenreFeelName(@PathVariable String name){
 
-
 		//Todos los autores segun genero
 		Genre genero=genreService.genreByName(name);
 		List<Author> listaAuthor=authorService.findAuthorFromGenre(genero.getId());
@@ -433,7 +525,6 @@ public class TweetCortoController {
 
 
 		return result;
-
 
 	}
 
@@ -526,6 +617,47 @@ public class TweetCortoController {
 		return result;
 
 	}
+
+
+	@GetMapping("/setUserScore")
+	public void getUserHits(){
+
+		//System.out.println("--------------Entra-----------------");
+		List<User> listaUsuarios=(List)userService.getAllUser();
+		Double score=0.0;
+		Double followers=0.0;
+		Double friends=0.0;
+		Double hits=0.0;
+		for (User u:listaUsuarios) {
+
+			followers=u.getFollowersCount()*1.0;
+			friends=u.getFriendsCount()*1.0;
+			hits=tweetCortoDao.getUserHits(u.getId())*1.0;
+
+
+			if ( followers!=0.0 ){
+				score=Math.log(followers);
+			}
+			if (friends!=0.0){
+				score=score+Math.log(friends)*0.1;
+			}
+			if (hits!=0.0){
+				score=score+Math.log(hits)*2.0;
+			}
+
+			//System.out.println(score);
+
+			u.setScore(score);
+			userService.create(u);
+			followers=0.0;
+			friends=0.0;
+			hits=0.0;
+			score=0.0;
+		}
+
+	}
+
+
 
 	@GetMapping("/getAll")
 	public void getAll(){

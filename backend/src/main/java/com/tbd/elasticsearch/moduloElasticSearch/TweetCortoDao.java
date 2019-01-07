@@ -16,6 +16,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -90,7 +91,7 @@ public class TweetCortoDao {
 				result.add(user);
 			}
 
-		System.out.println(result);
+
 		return result;
 	}
 	
@@ -136,6 +137,7 @@ public class TweetCortoDao {
 
 		//Nueva
 		sourceBuilder.query(QueryBuilders.matchPhraseQuery("text_lower",book.getName().toLowerCase()));
+		sourceBuilder.size(20000);
 		searchRequest.source(sourceBuilder);
 
 		SearchResponse searchResponse=null;
@@ -182,6 +184,8 @@ public class TweetCortoDao {
 
 		}
 
+
+
 		//Se arma el Map
 		HashMap<String, ArrayList> result = new HashMap<>();
 
@@ -203,6 +207,94 @@ public class TweetCortoDao {
 
 
 		return result;
+	}
+
+	//Lista de libros por sentimientos
+	public List<Integer> getBookSentimentList(Book book){
+
+		SearchRequest searchRequest = new SearchRequest();
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+		//Nueva
+
+		sourceBuilder.query(QueryBuilders.matchPhraseQuery("text_lower",book.getName().toLowerCase()) );
+		sourceBuilder.size(10000);
+		//Donde positive sea mayor a 0.65
+		//sourceBuilder.query(QueryBuilders.rangeQuery("positive").gte(0.65));
+
+		searchRequest.source(sourceBuilder);
+		SearchResponse searchResponse=null;
+
+		try {
+			searchResponse = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+
+		} catch (java.io.IOException e){
+			e.getLocalizedMessage();
+		}
+		SearchHits hits = searchResponse.getHits();
+		//System.out.printf("Cantida de Hits: %d" , searchResponse.getHits().totalHits );
+		//System.out.println("------");
+
+		Integer nHits=(int) searchResponse.getHits().totalHits;
+		Map<String, ProfileShardResult> sourceAsMap = searchResponse.getProfileResults();
+
+
+
+		//Sentimientos
+
+		//Positivo-Negativo-Neutro
+		Integer contadorPositivo=0;
+		Integer contadorNegativo=0;
+		Integer contadorNeutro=0;
+
+		SearchHit[] allGits=hits.getHits();
+		if (nHits>0) {
+			System.out.println("-----------------------");
+			System.out.println(nHits);
+			System.out.println(allGits.length);
+		}
+
+		for (SearchHit hit : allGits) {
+			Map<String, Object> sourceMap = hit.getSourceAsMap();
+			Double positive=(Double) sourceMap.get("positive");
+			Double negative=(Double) sourceMap.get("negative");
+			if(positive>0.650){
+				contadorPositivo++;
+			}
+			else if(negative>0.50){
+				contadorNegativo++;
+			}
+			else{
+				contadorNeutro++;
+			}
+
+
+
+		}
+
+
+
+		//Se arma el Map
+		HashMap<String, ArrayList> result = new HashMap<>();
+
+		ArrayList<String> label = new ArrayList<String>();
+		label.add("Positivo");
+		label.add("Negativo");
+		label.add("Neutro");
+
+		ArrayList<Integer> data = new ArrayList<Integer>();
+		data.add(contadorPositivo);
+		data.add(contadorNegativo);
+		data.add(contadorNeutro);
+
+		result.put("labels", label);
+		result.put("data", data);
+
+
+
+
+
+		return data;
 	}
 
 
@@ -290,6 +382,34 @@ public class TweetCortoDao {
 
 		return nHits;
 	}
+
+
+	public Integer getUserHits(Long id){
+
+		SearchRequest searchRequest = new SearchRequest();
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+
+
+		//Nueva
+		sourceBuilder.query(QueryBuilders.matchPhraseQuery("user.id",id));
+		searchRequest.source(sourceBuilder);
+
+		SearchResponse searchResponse=null;
+		try {
+			searchResponse = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+
+		} catch (java.io.IOException e){
+			e.getLocalizedMessage();
+		}
+		SearchHits hits = searchResponse.getHits();
+		Integer nHits=(int) searchResponse.getHits().totalHits;
+		Map<String, ProfileShardResult> sourceAsMap = searchResponse.getProfileResults();
+
+
+
+		return nHits;
+	}
+
 
 
 	public Map<String, Object> updateTweetCortoById(String id, TweetCorto tweet) {

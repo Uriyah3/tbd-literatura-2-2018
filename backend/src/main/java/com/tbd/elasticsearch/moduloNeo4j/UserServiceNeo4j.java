@@ -6,11 +6,13 @@ import com.tbd.elasticsearch.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.*;
 
 import static org.neo4j.ogm.session.Utils.map;
 
+@CrossOrigin(maxAge=3600)
 @Service
 public class UserServiceNeo4j {
 
@@ -63,7 +65,7 @@ public class UserServiceNeo4j {
 
         if(!userRepositoryNeo4j.findAll().isEmpty())
             userRepositoryNeo4j.deleteAll();
-        List<User> users = userRepository.findAll();//ByOrderByScoreDesc();
+        List<User> users = userRepository.findAllByOrderByScoreDesc().subList(0,999);
         UserNode userNode;
         int i = 0;
         for (User user:users) {
@@ -84,30 +86,30 @@ public class UserServiceNeo4j {
         Iterator<UserNode> result = userNodes.iterator();
         while (result.hasNext()) {
             UserNode userNode = result.next();
-            nodes.add(map("name", userNode.getScreenName(), "label", "user","id",i ,"_size", userNode.getScore()));
+            nodes.add(map("id", userNode.getScreenName(), "label", "user","_size", userNode.getScore()));
             int target = i;
             i++;
-            if (type.equals("book")) {
+            if (type.equals("book") || type.equals("all") ) {
                 System.out.println(userNode.getBooks().size());
                 for (BookNode bookNode : userNode.getBooks()) {
-                    Map<String, Object> book = map("name", bookNode.getTitle(), "label", "book","id",i);
+                    Map<String, Object> book = map("id", bookNode.getTitle(), "label", "book");
                     int source = nodes.indexOf(book);
                     if (source == -1) {
                         nodes.add(book);
                         source = i++;
                     }
-                    rels.add(map("sid", target, "tid", source));
+                    rels.add(map("source", userNode.getScreenName(), "target", book.get("id")));
                 }
             }
-            else{
+            if (type.equals("genre") || type.equals("all") ) {
                 for (GenreNode genreNode : userNode.getGenres()) {
-                    Map<String, Object> genre = map("name", genreNode.getName(), "label", "genre","id",i);
+                    Map<String, Object> genre = map("id", genreNode.getName(), "label", "genre");
                     int source = nodes.indexOf(genre);
                     if (source == -1) {
                         nodes.add(genre);
                         source = i++;
                     }
-                    rels.add(map("sid", target, "tid", source));
+                    rels.add(map("source", userNode.getScreenName(), "target", genre.get("id")));
                 }
             }
         }

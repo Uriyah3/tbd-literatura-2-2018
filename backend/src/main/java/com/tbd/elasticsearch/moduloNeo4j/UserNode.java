@@ -23,7 +23,7 @@ public class UserNode {
     private int friendsCount;
     private boolean isVerified;
     private String location;
-    private Integer score;
+    private Double score;
     //private List<Tweeted> tweets;
     @Relationship(type = "Tweeted_about")
     private List<BookNode> books = new ArrayList<>();
@@ -38,7 +38,7 @@ public class UserNode {
 
     }
 
-    public UserNode(Long id,String name, String screenName, int followersCount, int friendsCount, String location, boolean isVerified, Integer score){
+    public UserNode(Long id,String name, String screenName, int followersCount, int friendsCount, String location, boolean isVerified, Double score){
         //this.id = id;
         this.name = name;
         this.screenName = screenName;
@@ -96,7 +96,7 @@ public class UserNode {
         return genres;
     }
 
-    public Integer getScore() {
+    public Double getScore() {
         return score;
     }
 }

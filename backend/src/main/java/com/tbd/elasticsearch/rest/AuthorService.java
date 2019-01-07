@@ -42,7 +42,7 @@ public class AuthorService {
 		return authorRepository.findById(id);
 	}
 
-	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
+	@RequestMapping(value = "/name/{name}", method = RequestMethod.GET)
 	@ResponseBody
 	public Author findOneByName(@PathVariable("name") String name) {
 		return authorRepository.findByName(name);

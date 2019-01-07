@@ -31,13 +31,13 @@ public class User implements Serializable {
 	@Column(name="is_verified")
     private Boolean isVerified;
 	@Column(name="score")
-	private Integer score;
+	private Double score;
 
-	public Integer getScore() {
+	public Double getScore() {
 		return score;
 	}
 
-	public void setScore(Integer score) {
+	public void setScore(Double score) {
 		this.score = score;
 	}
 
