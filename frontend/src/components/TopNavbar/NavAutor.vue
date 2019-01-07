@@ -5,30 +5,36 @@
         <h3 class="md-title">Autores</h3>
       </div>
       <div class="md-toolbar-section-end">
-        <md-button class="md-just-icon md-simple md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </md-button>
-
-        <div class="md-collapse">
-          
+        <div>
           <md-list>
             <md-list-item to="/autores">
               <i class="material-icons" style="font-size:48px;">pie_chart</i>
-              <p class="hidden-lg hidden-md">Autores</p>
               
             </md-list-item>
 
             <md-list-item to="/autores/ranking">
               <i class="material-icons" style="font-size:48px;">format_list_numbered</i>
-              <p class="hidden-lg hidden-md">Dashboard</p>
             </md-list-item>            
           </md-list>
         </div>
+
+        <md-button class="md-just-icon md-simple md-toolbar-toggle" :class="{toggled: $sidebar.showSidebar}" @click="toggleSidebar"  style="width:48px;">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </md-button>
       </div>
     </div>
 
   </md-toolbar>
 </template>
 
+<script>
+export default {
+  methods: {
+    toggleSidebar() {
+      this.$sidebar.displaySidebar(!this.$sidebar.showSidebar);
+    }
+  }
+};
+</script>
