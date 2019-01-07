@@ -37,6 +37,13 @@ export default {
     axios({ method: "GET", "url": "http://192.168.0.21:8082/genre/top" }).then(result => {
       this.labels = result.data.labels;
       this.datasets[0].data = result.data.data;
+      var hits = 0;
+      for(var i = 0; i < 9; i++) {
+        hits += this.datasets[0].data[i];
+      }
+      for(var i = 0; i < 9; i++) {
+        this.labels[i] += " " + (this.datasets[0].data[i] / hits * 100).toFixed(2) + "%";
+      }
     }, error => {
       console.error(error);
     });

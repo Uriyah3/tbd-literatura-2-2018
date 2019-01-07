@@ -34,7 +34,7 @@
       }
     },
     mounted() {
-      axios({ method: "GET", "url": "http://192.168.0.21:8082/author/" + this.$route.params.id }).then(result => {
+      axios({ method: "GET", "url": "http://192.168.0.21:8082/book/" + this.$route.params.id }).then(result => {
         this.datasets[0].data = [result.data.positivo, result.data.negativo, result.data.neutro];
         var hits = result.data.positivo + result.data.negativo + result.data.neutro;
         this.labels[0] += " " + (result.data.positivo / hits * 100).toFixed(2) + "%";
