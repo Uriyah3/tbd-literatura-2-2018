@@ -84,30 +84,30 @@ public class UserServiceNeo4j {
         Iterator<UserNode> result = userNodes.iterator();
         while (result.hasNext()) {
             UserNode userNode = result.next();
-            nodes.add(map("name", userNode.getScreenName(), "label", "user"));
+            nodes.add(map("name", userNode.getScreenName(), "label", "user","id",i ,"_size", userNode.getScore()));
             int target = i;
             i++;
             if (type.equals("book")) {
                 System.out.println(userNode.getBooks().size());
                 for (BookNode bookNode : userNode.getBooks()) {
-                    Map<String, Object> book = map("title", bookNode.getTitle(), "label", "book");
+                    Map<String, Object> book = map("name", bookNode.getTitle(), "label", "book","id",i);
                     int source = nodes.indexOf(book);
                     if (source == -1) {
                         nodes.add(book);
                         source = i++;
                     }
-                    rels.add(map("source", target, "target", source));
+                    rels.add(map("sid", target, "tid", source));
                 }
             }
             else{
                 for (GenreNode genreNode : userNode.getGenres()) {
-                    Map<String, Object> genre = map("title", genreNode.getName(), "label", "genre");
+                    Map<String, Object> genre = map("name", genreNode.getName(), "label", "genre","id",i);
                     int source = nodes.indexOf(genre);
                     if (source == -1) {
                         nodes.add(genre);
                         source = i++;
                     }
-                    rels.add(map("source", target, "target", source));
+                    rels.add(map("sid", target, "tid", source));
                 }
             }
         }

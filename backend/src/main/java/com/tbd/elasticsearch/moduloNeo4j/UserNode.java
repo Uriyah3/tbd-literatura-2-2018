@@ -95,4 +95,8 @@ public class UserNode {
     public List<GenreNode> getGenres() {
         return genres;
     }
+
+    public Integer getScore() {
+        return score;
+    }
 }
