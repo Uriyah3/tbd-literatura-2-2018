@@ -1,44 +1,45 @@
 <template>
-  <div>
-    <h2 class="text-center">Los 10 autores más populares</h2>
+<div>
+  <h2 class="text-center" style="padding-bottom:0;">Autores más populares</h2>
 
-    <div class="card">
-      <chartjs-bar
-      v-bind:beginzero="beginZero"
-      v-bind:labels="labels"
-      v-bind:datalabel="item.dataLabel"
-      v-bind:data="item.data"
-      v-bind:backgroundcolor="item.bgColor"
-      v-bind:bordercolor="item.borderColor"
-      v-bind:bind="true" />
-    </div>
+  <div class="card" style="margin-top:-50px;">
+    <chartjs-pie v-bind:labels="labels"
+      v-bind:datasets="datasets"
+      v-bind:option="option"
+      v-bind:bind="true"/>
   </div>
+</div>
 </template>
 
 <script>
-  import axios from "axios";
+import axios from "axios";
 
-  export default {
-    data () {
-      return {
-        beginZero: true,
-        labels: [],
-        item:
+export default {
+  data() {
+    return {
+      labels: [],
+      datasets: [
         {
-          dataLabel: "Los 10 autores más populares",
           data: [],
-          bgColor: "#2985A2",
-          borderColor: "#0D3543"
+          backgroundColor: ["#C3F06D","#AADA66","#93C45E","#7DAF56","#68994D","#558444","#44703B","#345C31","#264827","#19361D"]
         }
-      }
-    },
-    mounted() {
-      axios({ method: "GET", "url": "http://localhost:8082/author/top" }).then(result => {
-        this.labels = result.data.labels.slice(0,10);
-        this.item.data = result.data.data.slice(0,10);
-      }, error => {
-        console.error(error);
-      });
-    }
+      ],
+      option: {
+        title: {
+          display: true/*,
+          position: "bottom",
+          text: "Libros"*/
+        }
+      },
+    };
+  },
+  mounted() {
+    axios({ method: "GET", "url": "http://192.168.0.21:8082/author/top" }).then(result => {
+      this.labels = result.data.labels.slice(0,10);
+      this.datasets[0].data = result.data.data.slice(0,10);
+    }, error => {
+      console.error(error);
+    });
   }
+};
 </script>

@@ -40,6 +40,8 @@ Vue.use(window.VueCharts);
 
 Vue.prototype.$Chartist = Chartist;
 
+Chart.defaults.global.defaultFontSize = 18;
+
 /* eslint-disable no-new */
 new Vue({
   el: "#app",

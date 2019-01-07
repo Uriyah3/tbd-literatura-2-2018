@@ -10,6 +10,10 @@ import ListAutor from "@/pages/Lists/ListAutor.vue";
 import ListLibro from "@/pages/Lists/ListLibro.vue";
 import ListGenero from "@/pages/Lists/ListGenero.vue";
 
+import DetalleAutor from "@/pages/Detalles/DetalleAutor.vue";
+import DetalleLibro from "@/pages/Detalles/DetalleLibro.vue";
+import DetalleGenero from "@/pages/Detalles/DetalleGenero.vue";
+
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
 import TableList from "@/pages/TableList.vue";
@@ -67,6 +71,21 @@ const routes = [
         path: "generos/ranking",
         name: "ListGenero",
         component: ListGenero
+      },
+      {
+        path: "autores/ranking/:id",
+        name: "DetalleAutor",
+        component: DetalleAutor
+      },
+      {
+        path: "libros/ranking/:id",
+        name: "DetalleLibro",
+        component: DetalleLibro
+      },
+      {
+        path: "generos/ranking/:id",
+        name: "DetalleGenero",
+        component: DetalleGenero
       },
       {
         path: "table",
