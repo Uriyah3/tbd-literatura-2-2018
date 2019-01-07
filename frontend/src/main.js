@@ -3,6 +3,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App";
+import SortedTablePlugin from "vue-sorted-table";
+
 
 // router setup
 import routes from "./routes/routes";
@@ -17,6 +19,9 @@ import MaterialDashboard from "./material-dashboard";
 
 import Chartist from "chartist";
 
+import "chart.js";
+import "hchs-vue-charts";
+
 // configure router
 const router = new VueRouter({
   routes, // short for routes: routes
@@ -24,12 +29,18 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
+
 Vue.use(MaterialDashboard);
 Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(Notifications);
+Vue.use(window.VueCharts);
+
+
 
 Vue.prototype.$Chartist = Chartist;
+
+Chart.defaults.global.defaultFontSize = 18;
 
 /* eslint-disable no-new */
 new Vue({

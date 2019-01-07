@@ -4,43 +4,40 @@
 
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/dashboard">
+      <sidebar-link to="/generos">
         <md-icon>dashboard</md-icon>
-        <p>Dashboard</p>
+        <p>Géneros</p>
       </sidebar-link>
-      <sidebar-link to="/user">
+      <sidebar-link to="/autores">
         <md-icon>person</md-icon>
-        <p>User Profile</p>
+        <p>Autores</p>
       </sidebar-link>
-      <sidebar-link to="/table">
-        <md-icon>content_paste</md-icon>
-        <p>Table list</p>
-      </sidebar-link>
-      <sidebar-link to="/typography">
+      
+      <sidebar-link to="/libros">
         <md-icon>library_books</md-icon>
-        <p>Typography</p>
+        <p>Libros</p>
       </sidebar-link>
-      <sidebar-link to="/icons">
-        <md-icon>bubble_chart</md-icon>
-        <p>Icons</p>
+
+      <sidebar-link to="/popularidad_temporal">
+        <md-icon>timeline</md-icon>
+        <p>Popularidad temporal</p>
       </sidebar-link>
-      <sidebar-link to="/maps">
+
+<!--
+      <sidebar-link to="/geo_espacial">
         <md-icon>location_on</md-icon>
-        <p>Maps</p>
+        <p>Usuarios Twitter</p>
       </sidebar-link>
-      <sidebar-link to="/notifications">
-        <md-icon>notifications</md-icon>
-        <p>Notifications</p>
+-->
+      <sidebar-link to="/relaciones_de_usuarios_y_sus_tweets">
+        <md-icon>group_work</md-icon>
+        <p>Grafo usuarios/géneros</p>
       </sidebar-link>
-      <sidebar-link to="/upgrade" class="active-pro">
-        <md-icon>unarchive</md-icon>
-        <p>Upgrade to PRO</p>
-      </sidebar-link>
+      
+      
     </side-bar>
 
     <div class="main-panel">
-      <top-navbar></top-navbar>
-
       <dashboard-content>
 
       </dashboard-content>
@@ -48,18 +45,17 @@
       <content-footer v-if="!$route.meta.hideFooter"></content-footer>
     </div>
   </div>
-</template>
+</template> 
 <style lang="scss">
 </style>
+
 <script>
-import TopNavbar from "./TopNavbar.vue";
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
 import MobileMenu from "@/pages/Layout/MobileMenu.vue";
 
 export default {
   components: {
-    TopNavbar,
     DashboardContent,
     ContentFooter,
     MobileMenu

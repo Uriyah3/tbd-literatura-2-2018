@@ -178,16 +178,6 @@
         padding: $padding-base 0;
         z-index: 4;
 
-        &:after{
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 15px;
-            height: 1px;
-            width: calc(100% - 30px);
-            background-color: rgba(180,180,180, .3);
-
-        }
 
         p{
             float: left;
@@ -224,17 +214,15 @@
             }
 
             .logo-img{
-              width: 40px;
+              width: 220px;
               display: inline-block;
-              height: 40px;
-              background: $white-color;
-              border-radius: 50%;
+              height: 90px;
               text-align: center;
               overflow: hidden;
               @include shadow-big();
 
                 img{
-                  width: 55%;
+                  width: 100%;
                   vertical-align: -webkit-baseline-middle;
                 }
             }
@@ -273,7 +261,7 @@
         @include set-background-color-button($brand-info);
     }
     &[data-color="green"]{
-        @include set-background-color-button($brand-success);
+        @include set-background-color-button(rgba(31, 58, 147, 1));
     }
     &[data-color="orange"]{
         @include set-background-color-button($brand-warning);
@@ -314,7 +302,7 @@
     @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
 
     > .content{
-        padding: 30px 15px;
+        padding: 0 15px;
         min-height: calc(100vh - 123px);
     }
 
@@ -325,6 +313,14 @@
     > .navbar{
         margin-bottom: 0;
     }
+}
+
+.md-toolbar-row {
+    border-bottom: 2px solid rgb(170, 171, 171);
+}
+
+.md-toolbar .md-title {
+    font-size: 24px !important;
 }
 // .sidebar,
 // .main-panel{
