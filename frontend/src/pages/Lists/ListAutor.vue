@@ -10,7 +10,7 @@
             <SortLink name="id">ID</SortLink>
           </th>
           <th scope="col" style="text-align: left; width: 10rem;">
-            <SortLink name="name">Name</SortLink>
+            <SortLink name="name">Nombre</SortLink>
           </th>
           <th scope="col" style="text-align: left; width: 10rem;">
             <SortLink name="hits">Hits</SortLink>

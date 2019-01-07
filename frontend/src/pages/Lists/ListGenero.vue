@@ -3,16 +3,46 @@
     <top-navbar/>
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-            <ul id="example-1">
-                <li  v-for="item in generos" :key="item"
-                v-bind:bind="true">
-                    {{ item.name }}
-                </li>
-                </ul>
+        <SortedTable :values="values">
+            <thead>
+        <tr>
+          <th scope="col" style="text-align: left; width: 10rem;">
+            <SortLink name="id">ID</SortLink>
+          </th>
+          <th scope="col" style="text-align: left; width: 10rem;">
+            <SortLink name="name">Nombre</SortLink>
+          </th>
+          <th scope="col" style="text-align: left; width: 10rem;">
+            <SortLink name="hits">Hits</SortLink>
+          </th>
+          <th scope="col" style="text-align: left; width: 10rem;">
+            <SortLink name="hits">Positivo</SortLink>
+          </th>
+          <th scope="col" style="text-align: left; width: 10rem;">
+            <SortLink name="hits">Neutro</SortLink>
+          </th>
+          <th scope="col" style="text-align: left; width: 10rem;">
+            <SortLink name="hits">Negativo</SortLink>
+          </th>
+        </tr>
+      </thead>
+      <tbody slot="body">
+        <tr v-for="value in generos" :key="value.id">
+          <td>{{ value.id }}</td>
+          <td>{{ value.name }}</td>
+          <td>{{ value.hits }}</td>
+          <td>{{ value.positivo }}</td>
+          <td>{{ value.neutro }}</td>
+          <td>{{ value.negativo }}</td>
+
+        </tr>
+      </tbody>
+        </SortedTable>            
       </div>
     </div>
   </div>
 </template>
+
 
 <script>
 import ChartMostPopularAuthors from "@/components/Charts/chart-most-popular-authors";
