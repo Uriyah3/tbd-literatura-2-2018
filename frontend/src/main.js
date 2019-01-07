@@ -3,6 +3,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import App from "./App";
+import SortedTablePlugin from "vue-sorted-table";
+
 
 // router setup
 import routes from "./routes/routes";
@@ -27,11 +29,14 @@ const router = new VueRouter({
 });
 
 Vue.use(VueRouter);
+
 Vue.use(MaterialDashboard);
 Vue.use(GlobalComponents);
 Vue.use(GlobalDirectives);
 Vue.use(Notifications);
 Vue.use(window.VueCharts);
+
+
 
 Vue.prototype.$Chartist = Chartist;
 
