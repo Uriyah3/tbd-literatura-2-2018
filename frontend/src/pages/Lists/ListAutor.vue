@@ -7,9 +7,6 @@
             <thead>
         <tr>
           <th scope="col" style="text-align: left; width: 10rem;">
-            <SortLink name="id">ID</SortLink>
-          </th>
-          <th scope="col" style="text-align: left; width: 10rem;">
             <SortLink name="name">Nombre</SortLink>
           </th>
           <th scope="col" style="text-align: left; width: 10rem;">
@@ -28,7 +25,6 @@
       </thead>
       <tbody slot="body">
         <tr v-for="value in authors" :key="value.id">
-          <td>{{ value.id }}</td>
           <td>{{ value.name }}</td>
           <td>{{ value.hits }}</td>
           <td>{{ value.positivo }}</td>
@@ -42,10 +38,6 @@
     </div>
   </div>
 </template>
-
-
-
-
 
 
 <script>
