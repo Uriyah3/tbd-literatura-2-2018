@@ -2,7 +2,7 @@
 <div>
   <h2 class="text-center" style="padding-bottom:0;">Los 10 libros más populares</h2>
 
-  <div class="card" style="margin-top:-10px;">
+  <div class="card" style="margin-top:-50px;">
     <chartjs-pie v-bind:labels="labels"
       v-bind:datasets="datasets"
       v-bind:option="option"
@@ -29,14 +29,22 @@ export default {
           display: true/*,
           position: "bottom",
           text: "Libros"*/
-        }
+        },
+        maintainAspectRatio: false
       }
     };
   },
   mounted() {
-    axios({ method: "GET", "url": "http://localhost:8082/book/top" }).then(result => {
-      this.labels = result.data.labels.slice(1,11);
-      this.datasets[0].data = result.data.data.slice(1,11);
+    axios({ method: "GET", "url": "http://192.168.0.21:8082/book/top" }).then(result => {
+      this.labels = result.data.labels.slice(0,10);
+      this.datasets[0].data = result.data.data.slice(0,10);
+      var hits = 0;
+      for(var i = 0; i < 10; i++) {
+        hits += this.datasets[0].data[i];
+      }
+      for(i = 0; i < 10; i++) {
+        this.labels[i] += " " + (this.datasets[0].data[i] / hits * 100).toFixed(2) + "%";
+      }
     }, error => {
       console.error(error);
     });

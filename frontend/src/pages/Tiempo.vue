@@ -3,19 +3,19 @@
     <top-navbar/>
     <div class="md-layout">
       <div class="md-layout-item md-medium-size-100 md-xsmall-size-100 md-size-100">
-        <chart-most-popular-books/>
+        <chart-temporal-popularity/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ChartMostPopularBooks from "@/components/Charts/chart-most-popular-books";
-import TopNavbar from "@/components/TopNavbar/NavLibro";
-    
+import chartTemporalPopularity from "@/components/Charts/chart-temporal-popularity";
+import TopNavbar from "@/pages/Layout/TopNavbar";
+
 export default {
   components: {
-    ChartMostPopularBooks,
+    chartTemporalPopularity,
     TopNavbar
   }
 };

@@ -2,22 +2,34 @@ import DashboardLayout from "@/pages/Layout/DashboardLayout.vue";
 
 import Dashboard from "@/pages/Dashboard.vue";
 import Autores from "@/pages/Autores.vue";
-import TableList from "@/pages/TableList.vue";
 import Libros from "@/pages/Libros.vue";
+import Tiempo from "@/pages/Tiempo.vue";
+import Grafo from "@/pages/Grafo.vue";
+import Geo from "@/pages/Geo.vue";
+import ListAutor from "@/pages/Lists/ListAutor.vue";
+import ListLibro from "@/pages/Lists/ListLibro.vue";
+import ListGenero from "@/pages/Lists/ListGenero.vue";
+
+import DetalleAutor from "@/pages/Detalles/DetalleAutor.vue";
+import DetalleLibro from "@/pages/Detalles/DetalleLibro.vue";
+import DetalleGenero from "@/pages/Detalles/DetalleGenero.vue";
+
 import Icons from "@/pages/Icons.vue";
 import Maps from "@/pages/Maps.vue";
+import TableList from "@/pages/TableList.vue";
 import Notifications from "@/pages/Notifications.vue";
 import UpgradeToPRO from "@/pages/UpgradeToPRO.vue";
+
 
 const routes = [
   {
     path: "/",
     component: DashboardLayout,
-    redirect: "/dashboard",
+    redirect: "/generos",
     children: [
       {
-        path: "dashboard",
-        name: "Dashboard",
+        path: "generos",
+        name: "Géneros",
         component: Dashboard
       },
       {
@@ -26,14 +38,59 @@ const routes = [
         component: Autores
       },
       {
-        path: "table",
-        name: "Table List",
-        component: TableList
-      },
-      {
         path: "libros",
         name: "Libros",
         component: Libros
+      },
+      {
+        path: "popularidad_temporal",
+        name: "Tiempo",
+        component: Tiempo
+      },
+      {
+        path: "geo_espacial",
+        name: "Geo",
+        component: Geo
+      },
+      {
+        path: "relaciones_de_usuarios_y_sus_tweets",
+        name: "Grafo",
+        component: Grafo
+      },
+      {
+        path: "autores/ranking",
+        name: "ListAutor",
+        component: ListAutor
+      },
+      {
+        path: "libros/ranking",
+        name: "ListLibro",
+        component: ListLibro
+      },
+      {
+        path: "generos/ranking",
+        name: "ListGenero",
+        component: ListGenero
+      },
+      {
+        path: "autores/ranking/:id",
+        name: "DetalleAutor",
+        component: DetalleAutor
+      },
+      {
+        path: "libros/ranking/:id",
+        name: "DetalleLibro",
+        component: DetalleLibro
+      },
+      {
+        path: "generos/ranking/:id",
+        name: "DetalleGenero",
+        component: DetalleGenero
+      },
+      {
+        path: "table",
+        name: "Table List",
+        component: TableList
       },
       {
         path: "icons",

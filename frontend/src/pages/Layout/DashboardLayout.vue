@@ -4,7 +4,7 @@
 
     <side-bar>
       <mobile-menu slot="content"></mobile-menu>
-      <sidebar-link to="/dashboard">
+      <sidebar-link to="/generos">
         <md-icon>dashboard</md-icon>
         <p>Géneros</p>
       </sidebar-link>
@@ -16,6 +16,22 @@
       <sidebar-link to="/libros">
         <md-icon>library_books</md-icon>
         <p>Libros</p>
+      </sidebar-link>
+
+      <sidebar-link to="/popularidad_temporal">
+        <md-icon>timeline</md-icon>
+        <p>Popularidad temporal</p>
+      </sidebar-link>
+
+<!--
+      <sidebar-link to="/geo_espacial">
+        <md-icon>location_on</md-icon>
+        <p>Usuarios Twitter</p>
+      </sidebar-link>
+-->
+      <sidebar-link to="/relaciones_de_usuarios_y_sus_tweets">
+        <md-icon>group_work</md-icon>
+        <p>Grafo usuarios/géneros</p>
       </sidebar-link>
       
       
@@ -32,6 +48,7 @@
 </template> 
 <style lang="scss">
 </style>
+
 <script>
 import ContentFooter from "./ContentFooter.vue";
 import DashboardContent from "./Content.vue";
