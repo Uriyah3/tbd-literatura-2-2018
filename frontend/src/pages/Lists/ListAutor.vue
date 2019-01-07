@@ -25,7 +25,7 @@
       </thead>
       <tbody slot="body">
         <tr v-for="value in authors" :key="value.id">
-          <td>{{ value.name }}</td>
+          <td ><router-link :to="'/autores/ranking/' + value.id" > {{ value.name }} </router-link> </td>
           <td>{{ value.hits }}</td>
           <td>{{ value.positivo }}</td>
           <td>{{ value.neutro }}</td>

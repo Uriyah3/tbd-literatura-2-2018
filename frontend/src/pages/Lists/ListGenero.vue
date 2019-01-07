@@ -25,11 +25,12 @@
       </thead>
       <tbody slot="body">
         <tr v-for="value in generos" :key="value.id">
-          <td>{{ value.name }}</td>
+          <td ><router-link :to="'/generos/ranking/' + value.id" > {{ value.name }} </router-link> </td>
           <td>{{ value.hits }}</td>
           <td>{{ value.positivo }}</td>
           <td>{{ value.neutro }}</td>
           <td>{{ value.negativo }}</td>
+          
 
         </tr>
       </tbody>
