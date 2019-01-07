@@ -28,7 +28,8 @@
             display: true/*,
             position: "bottom",
             text: "Libros"*/
-          }
+          },
+          maintainAspectRatio: false
         },
         title: "",
       }

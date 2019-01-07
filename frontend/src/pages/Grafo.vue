@@ -1,4 +1,3 @@
-<style src="vue-d3-network/dist/vue-d3-network.css"></style>
 <style>
 
 .links line {
@@ -11,6 +10,14 @@
   stroke-width: 1.5px;
 }
 
+.node {
+}
+
+.node text {
+  display: none;
+  font: 18px Roboto;
+  color: #444;
+}
 
 .node:hover circle {
   fill: #000;
@@ -25,21 +32,25 @@
   pointer-events: all;
 }
 
-text {
-  font-family: sans-serif;
-  font-size: 10px;
+svg {
+  width: 100%;
+  height: 100%;
 }
 
 </style>
 
-<template><svg width="960" height="600"></svg></template>
+<template>
+  <div class="content" id="cont" style="height: 90vh;width:100%;">
+    <svg></svg>
+  </div>
+</template>
 
 <script>
 export default {
   mounted() {
     var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+    width = document.getElementById("cont").offsetWidth,
+    height = document.getElementById("cont").offsetHeight;
     
 var radius = 8; 
 
@@ -55,9 +66,9 @@ var link_force =  d3.forceLink(json.links)
                         .id(function(d) { return d.id; });            
          
 var charge_force = d3.forceManyBody()
-    .strength(-50); 
+    .strength(-80); 
     
-var center_force = d3.forceCenter(width / 2, height / 2);  
+var center_force = d3.forceCenter(width / 2, height / 2);
                       
 simulation
     .force("charge_force", charge_force)
@@ -92,8 +103,9 @@ var node = g.append("g")
         .selectAll("circle")
         .data(json.nodes)
         .enter().append("g")
-      .attr("class", "node")
-        .append("circle")
+        .attr("class", "node")
+        
+var circle = node.append("circle")
         .attr("r", function(d) { if(d._size) return d._size; else return radius; })
         .attr("fill", circleColour);
 
@@ -182,8 +194,12 @@ function tickActions() {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 
+    circle
+        .attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+
     label
-        .attr("x", function(d) { return d.x + 8; })
+        .attr("x", function(d) { return d.x + (d._size ? d._size : radius); })
         .attr("y", function(d) { return d.y; });
 }  
 });

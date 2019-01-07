@@ -10,6 +10,16 @@
   </div>
 </template>
 
+<style type="text/css">
+  canvas.chartjs-render-monitor {
+    height:75vh !important;
+  }
+
+  .footer, .copyright {
+    padding-bottom: 0 !important;
+  }
+</style>
+
 <script>
   import axios from "axios";
 
@@ -28,7 +38,8 @@
             display: true/*,
             position: "bottom",
             text: "Libros"*/
-          }
+          },
+          maintainAspectRatio: false
         },
         title: "",
       }

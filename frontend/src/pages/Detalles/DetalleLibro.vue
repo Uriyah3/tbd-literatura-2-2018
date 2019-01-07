@@ -11,7 +11,7 @@
 
 <script>
 import ChartBookDetails from "@/components/Charts/chart-book-details";
-import TopNavbar from "@/components/TopNavbar/NavAutor";
+import TopNavbar from "@/components/TopNavbar/NavLibro";
 
 export default {
   components: {

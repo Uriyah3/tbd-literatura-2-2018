@@ -29,7 +29,8 @@ export default {
           display: true/*,
           position: "bottom",
           text: "Libros"*/
-        }
+        },
+        maintainAspectRatio: false
       }
     };
   },
