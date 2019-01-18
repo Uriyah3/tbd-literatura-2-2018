@@ -23,18 +23,15 @@
         <p>Popularidad temporal</p>
       </sidebar-link>
 
-<!--
-      <sidebar-link to="/geo_espacial">
-        <md-icon>location_on</md-icon>
-        <p>Usuarios Twitter</p>
-      </sidebar-link>
--->
       <sidebar-link to="/relaciones_de_usuarios_y_sus_tweets">
         <md-icon>group_work</md-icon>
         <p>Grafo usuarios/géneros</p>
       </sidebar-link>
       
-      
+      <sidebar-link to="/#">
+        <md-icon>terrain</md-icon>
+        <p>Mapas</p>
+      </sidebar-link>
     </side-bar>
 
     <div class="main-panel">
