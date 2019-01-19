@@ -1,6 +1,6 @@
 package com.tbd.elasticsearch.moduloElasticSearch;
 
-import com.tbd.elasticsearch.entities.User;
+import com.tbd.elasticsearch.entities.*;
 import com.tbd.elasticsearch.moduloSentimentAnalysis.SentimentAnalysisController;
 import com.tbd.elasticsearch.rest.UserService;
 import org.elasticsearch.search.profile.ProfileShardResult;
@@ -9,9 +9,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
 
-import com.tbd.elasticsearch.entities.Author;
-import com.tbd.elasticsearch.entities.Book;
-import com.tbd.elasticsearch.entities.Genre;
 import com.tbd.elasticsearch.moduloMongo.Tweet;
 import com.tbd.elasticsearch.moduloMongo.TweetService;
 import com.tbd.elasticsearch.rest.AuthorService;
@@ -54,14 +51,17 @@ public class TweetCortoController {
 
 	@Autowired
 	private SentimentAnalysisController sentimentService;
-    
+
 
 
     public TweetCortoController(TweetCortoDao tweetCortoDao) {
         this.tweetCortoDao = tweetCortoDao;
     }
 
-    
+    @GetMapping("/country/{country}")
+	public Object popularityCountry(@PathVariable String country ){
+    	return tweetCortoDao.getTweetsCountries(new Country(country));
+    }
     
     //Insertar datos de mongo en elastic
     @GetMapping("/insert")

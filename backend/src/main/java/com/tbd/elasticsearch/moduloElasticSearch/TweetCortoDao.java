@@ -3,6 +3,7 @@ package com.tbd.elasticsearch.moduloElasticSearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbd.elasticsearch.entities.Book;
+import com.tbd.elasticsearch.entities.Country;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
@@ -15,6 +16,7 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -68,6 +70,28 @@ public class TweetCortoDao {
 		return sourceAsMap;
 	}
 
+	public Map<String, Integer> getTweetsCountries(Country country){
+
+		SearchRequest searchRequest = new SearchRequest();
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		sourceBuilder.query(QueryBuilders.matchQuery("user.location",country.getName()));
+		searchRequest.source(sourceBuilder);
+		SearchResponse searchResponse=null;
+		Map<String, Integer> result = new HashMap<>();
+		try {
+			searchResponse = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+
+		} catch (java.io.IOException e){
+			e.getLocalizedMessage();
+		}
+		result.put(country.getName(), (int)searchResponse.getHits().getTotalHits());
+
+
+		return result;
+
+	}
+
+
 	public List<Map<String, Object>> getUsersTweeted(String book) {
 
 		SearchRequest searchRequest = new SearchRequest();
@@ -90,8 +114,6 @@ public class TweetCortoDao {
 				Map<String,Object> user = (Map<String,Object>) hit.get("user");
 				result.add(user);
 			}
-
-
 		return result;
 	}
 	

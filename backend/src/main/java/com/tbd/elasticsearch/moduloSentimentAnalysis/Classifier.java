@@ -37,7 +37,7 @@ public class Classifier {
 		this.model = model;
 	}
 	
-	@PostConstruct
+	//@PostConstruct
 	public void train() {
 		InputStreamFactory dataIn=null;
 		try {
