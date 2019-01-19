@@ -62,6 +62,20 @@ public class TweetCortoController {
 	public Object popularityCountry(@PathVariable String country ){
     	return tweetCortoDao.getTweetsCountries(new Country(country));
     }
+
+
+	//Se generan todos los datos
+	@GetMapping("/country/book/{country}")
+	public Object bookCountry(@PathVariable String country ){
+		return tweetCortoDao.getBookCountries(new Country(country));
+	}
+
+
+
+
+
+
+
     
     //Insertar datos de mongo en elastic
     @GetMapping("/insert")

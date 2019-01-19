@@ -3,7 +3,10 @@ package com.tbd.elasticsearch.moduloElasticSearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbd.elasticsearch.entities.Book;
+import com.tbd.elasticsearch.entities.Author;
 import com.tbd.elasticsearch.entities.Country;
+import com.tbd.elasticsearch.rest.AuthorService;
+import com.tbd.elasticsearch.rest.BookService;
 import org.elasticsearch.ElasticsearchException;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
@@ -23,9 +26,11 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.profile.ProfileShardResult;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
+
 
 
 @Repository
@@ -34,9 +39,15 @@ public class TweetCortoDao {
 	private final String TYPE = "data";
 	private RestHighLevelClient restHighLevelClient;
 	private ObjectMapper objectMapper;
-	
-	
-    
+
+	@Autowired
+	private BookService bookService;
+
+	@Autowired
+	private AuthorService authorService;
+
+
+
 
 	public TweetCortoDao(ObjectMapper objectMapper, RestHighLevelClient restHighLevelClient) {
 		this.objectMapper = objectMapper;
@@ -70,6 +81,8 @@ public class TweetCortoDao {
 		return sourceAsMap;
 	}
 
+
+	//Hits por pais
 	public Map<String, Integer> getTweetsCountries(Country country){
 
 		SearchRequest searchRequest = new SearchRequest();
@@ -90,6 +103,167 @@ public class TweetCortoDao {
 		return result;
 
 	}
+
+
+	//Libro top pais
+	public Map<String, Integer> getBookCountries(Country country){
+
+		SearchRequest searchRequest = new SearchRequest();
+		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
+		sourceBuilder.query(QueryBuilders.matchQuery("user.location",country.getName()));
+		sourceBuilder.size(10000);
+		searchRequest.source(sourceBuilder);
+		SearchResponse searchResponse=null;
+		Map<String, Integer> result = new HashMap<>();
+		try {
+			searchResponse = restHighLevelClient.search(searchRequest,RequestOptions.DEFAULT);
+
+		} catch (java.io.IOException e){
+			e.getLocalizedMessage();
+		}
+		result.put(country.getName(), (int)searchResponse.getHits().getTotalHits());
+
+
+		SearchHits hits = searchResponse.getHits();
+		SearchHit[] allGits=hits.getHits();
+
+		List <Long> idLibros=new ArrayList<>();
+		List <Integer> score=new ArrayList<>();
+
+		for (SearchHit hit : allGits) {
+			Map<String, Object> sourceMap = hit.getSourceAsMap();
+			Integer book_id=(Integer) sourceMap.get("book_id");
+			Long book_idL=book_id.longValue();
+
+			//System.out.println("--------------------------");
+			//System.out.println(book_id);
+
+			if (book_id!=-1){
+
+				Integer index=idLibros.indexOf(book_idL);
+				//System.out.println(".........");
+				//System.out.println(index);
+
+				if (index==-1){
+					idLibros.add(book_idL);
+					score.add(1);
+				}
+				else if(index!=-1){
+					score.set(index,score.get(index)+1);
+
+				}
+
+			}
+
+		}
+
+		System.out.println(idLibros);
+		System.out.println(score);
+
+		//Libro top pais
+		Integer indiceLibroTop=score.indexOf(Collections.max(score));
+		Long idLibroTop=idLibros.get(indiceLibroTop);
+
+		System.out.println("Libro mas top: " + idLibroTop);
+		System.out.println("Total de hits: " + Collections.max(score));
+		//--------------------------------------------------------
+
+
+		//El autor mas top
+		List <Long> idAutores=new ArrayList<>();
+		List <Integer> scoreAutores=new ArrayList<>();
+
+		for (Long idbook :idLibros ){
+
+			//Autor de libro
+			Optional<Book> b=bookService.findOne(idbook);
+			Long idAutor=b.get().getAuthorId();
+			//System.out.println("id Autor: " + idAutor);
+
+			Integer indiceAutor=idAutores.indexOf(idAutor);
+			//Integer indiceScoreLibro=;
+
+			if (indiceAutor==-1){
+				idAutores.add(idAutor);
+				//Mas libros comentados o comentarios en general
+				//Score de este libro
+				Integer indiceLibro=idLibros.indexOf(idbook);
+				Integer scoreLibroAutor=score.get(indiceLibro);
+				scoreAutores.add(scoreLibroAutor);
+			}
+			else if(indiceAutor!=-1){
+				Integer indiceLibro=idLibros.indexOf(idbook);
+				Integer scoreLibroAutor=score.get(indiceLibro);
+				scoreAutores.set(indiceAutor,scoreAutores.get(indiceAutor)+scoreLibroAutor);
+			}
+
+
+		}
+
+		System.out.println( idAutores);
+		System.out.println(scoreAutores);
+
+		//Autor top pais
+		Integer indiceAutorTop=scoreAutores.indexOf(Collections.max(scoreAutores));
+		Long idAutorTop=idAutores.get(indiceAutorTop);
+
+		System.out.println("Autor mas top: " + idAutorTop);
+		System.out.println("Total de hits: " + Collections.max(scoreAutores));
+		//--------------------------------------------------------
+
+
+
+
+		//Genero mas popular
+		List<Long> idGeneros=new ArrayList<>();
+		List<Integer> scoreGeneros=new ArrayList<>();
+
+
+		for (Long idautor :idAutores ){
+
+			//Genero de autor
+			Optional<Author> a=authorService.findOne(idautor);
+			Long idGenre=a.get().getGenreId();
+			//System.out.println("id Genre: " + idGenre);
+
+			Integer indiceGenero=idGeneros.indexOf(idGenre);
+
+
+			if (indiceGenero==-1){
+				idGeneros.add(idGenre);
+				//Mas autores comentados o comentarios en general
+				//Score de este autor
+				Integer indiceAutorG=idAutores.indexOf(idautor);
+				Integer scoreAutorGenero=score.get(indiceAutorG);
+				scoreGeneros.add(scoreAutorGenero);
+			}
+			else if(indiceGenero!=-1){
+				Integer indiceAutorG=idAutores.indexOf(idautor);
+				Integer scoreAutorGenero=score.get(indiceAutorG);
+				scoreGeneros.set(indiceGenero,scoreGeneros.get(indiceGenero)+scoreAutorGenero);
+			}
+
+
+		}
+
+		System.out.println(idGeneros);
+		System.out.println(scoreGeneros);
+
+		//Genero top pais
+		Integer indiceGeneroTop=scoreGeneros.indexOf(Collections.max(scoreGeneros));
+		Long idGeneroTop=idGeneros.get(indiceGeneroTop);
+
+		System.out.println("Genero mas top: " + idGeneroTop);
+		System.out.println("Total de hits: " + Collections.max(scoreGeneros));
+		//--------------------------------------------------------
+
+
+		return result;
+
+	}
+
+
+
 
 
 	public List<Map<String, Object>> getUsersTweeted(String book) {
