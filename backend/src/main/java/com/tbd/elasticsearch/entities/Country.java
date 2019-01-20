@@ -6,6 +6,9 @@ import javax.persistence.*;
 @Table(name = "country")
 public class Country {
 
+    public Country(){
+    }
+
     public Country(String name){
         this.name=name;
     }
@@ -26,6 +29,52 @@ public class Country {
     @Column(name = "hits")
     int hits;
 
+    @Column(name = "population")
+    int population;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCapital() {
+        return capital;
+    }
+
+    public void setCapital(String capital) {
+        this.capital = capital;
+    }
+
+    public String getPolygon() {
+        return polygon;
+    }
+
+    public void setPolygon(String polygon) {
+        this.polygon = polygon;
+    }
+
+    public int getHits() {
+        return hits;
+    }
+
+    public void setHits(int hits) {
+        this.hits = hits;
+    }
+
+    public int getPopulation() {
+        return population;
+    }
+
+    public void setPopulation(int population) {
+        this.population = population;
+    }
 
     public String getName() {
         return name;
