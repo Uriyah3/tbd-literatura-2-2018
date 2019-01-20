@@ -106,7 +106,7 @@ public class TweetCortoDao {
 
 
 	//Libro top pais
-	public Map<String, Integer> getBookCountries(Country country){
+	public List<Long> getBookCountries(Country country){
 
 		SearchRequest searchRequest = new SearchRequest();
 		SearchSourceBuilder sourceBuilder = new SearchSourceBuilder();
@@ -124,8 +124,16 @@ public class TweetCortoDao {
 		result.put(country.getName(), (int)searchResponse.getHits().getTotalHits());
 
 
+
+
+		if (searchResponse.getHits().getTotalHits()==0){
+			return null;
+		}
+
 		SearchHits hits = searchResponse.getHits();
 		SearchHit[] allGits=hits.getHits();
+
+
 
 		List <Long> idLibros=new ArrayList<>();
 		List <Integer> score=new ArrayList<>();
@@ -157,16 +165,23 @@ public class TweetCortoDao {
 
 		}
 
-		System.out.println(idLibros);
-		System.out.println(score);
+		//System.out.println(idLibros);
+		//System.out.println(score);
+
+		List <Long> salida=new ArrayList<>();
+
 
 		//Libro top pais
 		Integer indiceLibroTop=score.indexOf(Collections.max(score));
 		Long idLibroTop=idLibros.get(indiceLibroTop);
 
-		System.out.println("Libro mas top: " + idLibroTop);
-		System.out.println("Total de hits: " + Collections.max(score));
+		//System.out.println("Libro mas top: " + idLibroTop);
+		//System.out.println("Total de hits: " + Collections.max(score));
 		//--------------------------------------------------------
+
+		Long totalHits=hits.getTotalHits();
+		salida.add(totalHits);
+		salida.add(idLibroTop);
 
 
 		//El autor mas top
@@ -200,16 +215,17 @@ public class TweetCortoDao {
 
 		}
 
-		System.out.println( idAutores);
-		System.out.println(scoreAutores);
+		//System.out.println( idAutores);
+		//System.out.println(scoreAutores);
 
 		//Autor top pais
 		Integer indiceAutorTop=scoreAutores.indexOf(Collections.max(scoreAutores));
 		Long idAutorTop=idAutores.get(indiceAutorTop);
 
-		System.out.println("Autor mas top: " + idAutorTop);
-		System.out.println("Total de hits: " + Collections.max(scoreAutores));
+		//System.out.println("Autor mas top: " + idAutorTop);
+		//System.out.println("Total de hits: " + Collections.max(scoreAutores));
 		//--------------------------------------------------------
+		salida.add(idAutorTop);
 
 
 
@@ -246,19 +262,21 @@ public class TweetCortoDao {
 
 		}
 
-		System.out.println(idGeneros);
-		System.out.println(scoreGeneros);
+		//System.out.println(idGeneros);
+		//System.out.println(scoreGeneros);
 
 		//Genero top pais
 		Integer indiceGeneroTop=scoreGeneros.indexOf(Collections.max(scoreGeneros));
 		Long idGeneroTop=idGeneros.get(indiceGeneroTop);
 
-		System.out.println("Genero mas top: " + idGeneroTop);
-		System.out.println("Total de hits: " + Collections.max(scoreGeneros));
+		//System.out.println("Genero mas top: " + idGeneroTop);
+		//System.out.println("Total de hits: " + Collections.max(scoreGeneros));
 		//--------------------------------------------------------
+		salida.add(idGeneroTop);
 
+		//Retornar array de
 
-		return result;
+		return salida;
 
 	}
 

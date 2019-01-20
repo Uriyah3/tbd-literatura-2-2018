@@ -2,7 +2,7 @@ package com.tbd.elasticsearch.moduloElasticSearch;
 
 import com.tbd.elasticsearch.entities.*;
 import com.tbd.elasticsearch.moduloSentimentAnalysis.SentimentAnalysisController;
-import com.tbd.elasticsearch.rest.UserService;
+import com.tbd.elasticsearch.rest.*;
 import org.elasticsearch.search.profile.ProfileShardResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.tbd.elasticsearch.moduloMongo.Tweet;
 import com.tbd.elasticsearch.moduloMongo.TweetService;
-import com.tbd.elasticsearch.rest.AuthorService;
-import com.tbd.elasticsearch.rest.BookService;
-import com.tbd.elasticsearch.rest.GenreService;
 
 
 import java.time.LocalDate;
@@ -39,12 +36,15 @@ public class TweetCortoController {
     
     @Autowired
     private BookService bookService;
-    
+
     @Autowired
     private AuthorService authorService;
     
     @Autowired
     private GenreService genreService;
+
+    @Autowired
+    private CountryService countryService;
     
     @Autowired
     private TweetService tweetService;
@@ -71,6 +71,41 @@ public class TweetCortoController {
 	}
 
 
+	//Obtener todos los datos de localizacion
+    @GetMapping("/country/all")
+    public void mostrarTodo(){
+        List<Country> listaPaises= (List) countryService.getAll();
+        List <Long> datos=new ArrayList<>();
+
+        for (Country c : listaPaises){
+
+            datos=tweetCortoDao.getBookCountries(c);
+
+            System.out.println("------------------------------------");
+
+            if (datos!=null){
+				System.out.println(c.getName());
+				System.out.println(datos.get(0));
+
+
+				Book libro=bookService.findOne(datos.get(1)).get();
+				Author autor=authorService.findOne(datos.get(2)).get();
+				Genre genero=genreService.findOne(datos.get(3)).get();
+
+				System.out.println(libro.getName());
+				System.out.println(autor.getName());
+				System.out.println(genero.getName());
+
+				Float n=datos.get(0).floatValue()/c.getPopulation()*1000000;
+				System.out.println("Normalizado: " + n);
+
+				//Armar json
+			}
+
+        }
+
+
+    }
 
 
 
