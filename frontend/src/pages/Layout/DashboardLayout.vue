@@ -28,7 +28,7 @@
         <p>Grafo usuarios/géneros</p>
       </sidebar-link>
       
-      <sidebar-link to="/#">
+      <sidebar-link to="/map_libro">
         <md-icon>terrain</md-icon>
         <p>Mapas</p>
       </sidebar-link>

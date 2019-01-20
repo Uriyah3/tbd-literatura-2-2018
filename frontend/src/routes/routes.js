@@ -10,6 +10,11 @@ import ListAutor from "@/pages/Lists/ListAutor.vue";
 import ListLibro from "@/pages/Lists/ListLibro.vue";
 import ListGenero from "@/pages/Lists/ListGenero.vue";
 
+import MapAutor from "@/pages/Mapas/MapAutor.vue";
+import MapGenero from "@/pages/Mapas/MapGenero.vue";
+import MapLibro from "@/pages/Mapas/MapLibro.vue";
+
+
 import DetalleAutor from "@/pages/Detalles/DetalleAutor.vue";
 import DetalleLibro from "@/pages/Detalles/DetalleLibro.vue";
 import DetalleGenero from "@/pages/Detalles/DetalleGenero.vue";
@@ -27,6 +32,21 @@ const routes = [
     component: DashboardLayout,
     redirect: "/generos",
     children: [
+      {
+        path: "map_libro",
+        name: "MapLibro",
+        component: Maps
+      },
+      {
+        path: "map_autor",
+        name: "MapAutor",
+        component: Maps
+      },
+      {
+        path: "map_genero",
+        name: "MapGenero",
+        component: Maps
+      },
       {
         path: "generos",
         name: "Géneros",

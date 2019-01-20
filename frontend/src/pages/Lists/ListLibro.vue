@@ -1,3 +1,4 @@
+
 <template>
   <div class="content">
     <top-navbar/>
@@ -70,3 +71,4 @@ export default {
 
 };
 </script>
+
