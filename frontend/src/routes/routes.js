@@ -35,17 +35,17 @@ const routes = [
       {
         path: "map_libro",
         name: "MapLibro",
-        component: Maps
+        component: MapLibro
       },
       {
         path: "map_autor",
         name: "MapAutor",
-        component: Maps
+        component: MapAutor
       },
       {
         path: "map_genero",
         name: "MapGenero",
-        component: Maps
+        component: MapGenero
       },
       {
         path: "generos",
