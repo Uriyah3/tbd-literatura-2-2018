@@ -73,9 +73,11 @@ public class TweetCortoController {
 
 	//Obtener todos los datos de localizacion
     @GetMapping("/country/all")
-    public void mostrarTodo(){
+    public Object mostrarTodo(){
         List<Country> listaPaises= (List) countryService.getAll();
         List <Long> datos=new ArrayList<>();
+
+		Map<String,Map<String, String>> salida = new HashMap<>();
 
         for (Country c : listaPaises){
 
@@ -100,9 +102,28 @@ public class TweetCortoController {
 				System.out.println("Normalizado: " + n);
 
 				//Armar json
+				Map<String, String> jsonPais = new HashMap<>();
+
+				//nombre
+				jsonPais.put("name", c.getName());
+				//densidad (normalizado)
+				jsonPais.put("density", n.toString());
+				//hits
+				jsonPais.put("hits", datos.get(0).toString());
+				//libro
+				jsonPais.put("libro", libro.getName());
+				//autor
+				jsonPais.put("autor", autor.getName());
+				//genero
+				jsonPais.put("genero", genero.getName());
+
+				salida.put("Pais",jsonPais);
+
 			}
 
         }
+
+		return salida;
 
 
     }
