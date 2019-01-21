@@ -15,7 +15,37 @@ public class Genre implements Serializable{
 	private String name;
 	@Column(name="hits")
 	private Integer hits;
-	
+
+	@Column(name="positivo")
+	private Integer positivo;
+	@Column(name="negativo")
+	private Integer negativo;
+	@Column(name="neutro")
+	private Integer neutro;
+
+	public Integer getPositivo() {
+		return positivo;
+	}
+
+	public void setPositivo(Integer positivo) {
+		this.positivo = positivo;
+	}
+
+	public Integer getNegativo() {
+		return negativo;
+	}
+
+	public void setNegativo(Integer negativo) {
+		this.negativo = negativo;
+	}
+
+	public Integer getNeutro() {
+		return neutro;
+	}
+
+	public void setNeutro(Integer neutro) {
+		this.neutro = neutro;
+	}
 	
 	public Integer getHits() {
 		return hits;

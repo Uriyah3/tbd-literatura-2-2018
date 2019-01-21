@@ -23,6 +23,39 @@ public class Book implements Serializable{
 	private Long authorId;
 	@Column(name="genreId", nullable=false)
 	private Long genreId;
+
+
+	@Column(name="positivo")
+	private Integer positivo;
+	@Column(name="negativo")
+	private Integer negativo;
+	@Column(name="neutro")
+	private Integer neutro;
+
+	public Integer getPositivo() {
+		return positivo;
+	}
+
+	public void setPositivo(Integer positivo) {
+		this.positivo = positivo;
+	}
+
+	public Integer getNegativo() {
+		return negativo;
+	}
+
+	public void setNegativo(Integer negativo) {
+		this.negativo = negativo;
+	}
+
+	public Integer getNeutro() {
+		return neutro;
+	}
+
+	public void setNeutro(Integer neutro) {
+		this.neutro = neutro;
+	}
+
 	public Long getId() {
 		return id;
 	}
