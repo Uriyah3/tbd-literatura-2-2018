@@ -1,11 +1,10 @@
 <template>
   <div class="content">
-    <top-navbar/>
     <div id="map"></div>
   </div>
 </template>
 <style>
-#map { height: 78vh !important;}
+#map { height: 90vh !important; margin-top:15px; border:1px solid gray;}
 svg {
   width: auto;
   height: auto;
@@ -108,7 +107,7 @@ export default{
     }
 
 
-    var map = L.map('map').setView([2, -60], 3);
+    var map = L.map('map').setView([-4, -60], 3);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png ', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
     geojson = L.geoJson(chileData, {
         style: style,
@@ -127,9 +126,9 @@ export default{
     info.update = function (props) {
         this._div.innerHTML = '<h4>Popularidad de la literatura</h4>' +  (props ?
             '<b style="font-size:1.2em;">' + props.name + '</b><br />' +
-            '<b>Libro más popular: </b>' + props.book + '<br />' +
-            '<b>Autor/a más popular: </b>' + props.author + '<br />' +
-            '<b>Género más popular: </b>' + props.genre + '<br />' +
+            '<b>Libro más popular: </b>' + props.libro + '<br />' +
+            '<b>Autor/a más popular: </b>' + props.autor + '<br />' +
+            '<b>Género más popular: </b>' + props.genero + '<br />' +
             '<b>Comentarios: </b>' + props.hits + '<br />' +
             '<b>Índice popularidad: </b>' + props.density + '<br />'
             : 'Coloque el puntero sobre un país');
@@ -144,7 +143,7 @@ export default{
     legend.onAdd = function (map) {
 
         var div = L.DomUtil.create('div', 'info legend'),
-            grades = [0, 10, 20, 50, 100, 200, 500, 1000, 2000],
+            grades = [0, Math.round(extent[1]/9*1), Math.round(extent[1]/9*2), Math.round(extent[1]/9*3), Math.round(extent[1]/9*4), Math.round(extent[1]/9*5), Math.round(extent[1]/9*6), Math.round(extent[1]/9*7), Math.round(extent[1]/9*8)],
             labels = [];
 
         // loop through our density intervals and generate a label with a colored square for each interval
